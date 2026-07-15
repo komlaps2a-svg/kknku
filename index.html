@@ -14,7 +14,7 @@
     <meta property="og:url" content="https://kknku.app/">
     <meta property="og:title" content="KKNKU - Sekretariat Pro">
     <meta property="og:description" content="Aplikasi Sekretariat Mahasiswa KKN Cerdas. Integrasi notulensi, persuratan otomatis, dan penjadwalan.">
-    <meta property="og:image" content="https://kknku.app/icon.png">
+    <meta property="og:image" content="https://kknku.app/icon-512.png">
     <meta property="og:site_name" content="KKNKU">
 
     <!-- Twitter -->
@@ -22,7 +22,7 @@
     <meta property="twitter:url" content="https://kknku.app/">
     <meta property="twitter:title" content="KKNKU - Sekretariat Pro">
     <meta property="twitter:description" content="Aplikasi Sekretariat Mahasiswa KKN Cerdas. Integrasi notulensi, persuratan otomatis, dan penjadwalan.">
-    <meta property="twitter:image" content="https://kknku.app/icon.png">
+    <meta property="twitter:image" content="https://kknku.app/icon-512.png">
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -74,7 +74,7 @@
                     </svg>
                     <div>
                         <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">KKNKU</h1>
-                        <span class="text-[10px] font-bold text-blue-600 tracking-widest uppercase bg-blue-100 dark:bg-blue-900/30 px-1.5 py-0.5 rounded">Pro Dashboard</span>
+                        <span class="text-[10px] font-bold text-blue-600 tracking-widest uppercase bg-blue-100 dark:bg-blue-900/30 px-1.5 py-0.5 rounded">by: daeng</span>
                     </div>
                 </div>
                 <button id="btn-theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 active:scale-95 transition-all">
@@ -95,22 +95,22 @@
                     </div>
                     <div class="flex justify-between items-center h-[64px] px-2 max-w-sm mx-auto">
                         <div class="flex w-5/12 justify-evenly">
-                            <button onclick="switchTab('notes')" id="tab-notes" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-xl transition-colors text-slate-400">
+                            <button onclick="switchTab('notes')" id="tab-notes" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-2xl transition-colors text-slate-400">
                                 <i data-lucide="book-open" class="w-5 h-5 mb-0.5 nav-icon stroke-2"></i>
                                 <span class="text-[9px] font-extrabold tracking-wider">ARSIP</span>
                             </button>
-                            <button onclick="switchTab('tasks')" id="tab-tasks" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-xl transition-colors text-slate-400">
+                            <button onclick="switchTab('tasks')" id="tab-tasks" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-2xl transition-colors text-slate-400">
                                 <i data-lucide="check-square" class="w-5 h-5 mb-0.5 nav-icon stroke-2"></i>
                                 <span class="text-[9px] font-extrabold tracking-wider">TUGAS</span>
                             </button>
                         </div>
                         <div class="w-2/12"></div>
                         <div class="flex w-5/12 justify-evenly">
-                            <button onclick="switchTab('agenda')" id="tab-agenda" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-xl transition-colors text-slate-400">
+                            <button onclick="switchTab('agenda')" id="tab-agenda" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-2xl transition-colors text-slate-400">
                                 <i data-lucide="calendar-days" class="w-5 h-5 mb-0.5 nav-icon stroke-2"></i>
                                 <span class="text-[9px] font-extrabold tracking-wider">JADWAL</span>
                             </button>
-                            <button onclick="switchTab('templates')" id="tab-templates" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-xl transition-colors text-slate-400">
+                            <button onclick="switchTab('templates')" id="tab-templates" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-2xl transition-colors text-slate-400">
                                 <i data-lucide="briefcase" class="w-5 h-5 mb-0.5 nav-icon stroke-2"></i>
                                 <span class="text-[9px] font-extrabold tracking-wider">SURAT</span>
                             </button>
@@ -123,14 +123,14 @@
         <!-- ================= EDITOR VIEW ================= -->
         <div id="view-editor" class="hidden flex flex-col h-full w-full absolute inset-0 z-50 bg-slate-50 dark:bg-slate-950 animate-in">
             <div class="flex justify-between items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-safe">
-                <button onclick="closeEditor()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"><i data-lucide="arrow-left"></i></button>
+                <button onclick="closeEditor()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-colors"><i data-lucide="arrow-left"></i></button>
                 <span id="editor-type-label" class="font-bold text-xs tracking-widest uppercase text-slate-800 dark:text-slate-200">Editor Arsip</span>
-                <button onclick="saveNote()" class="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/40 rounded-full active:scale-95 transition-all"><i data-lucide="check"></i></button>
+                <button onclick="saveNote()" class="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/40 rounded-2xl active:scale-95 transition-all"><i data-lucide="check"></i></button>
             </div>
             <div class="flex-1 overflow-y-auto flex flex-col">
-                <div class="bg-white dark:bg-slate-900 px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+                <div class="bg-white dark:bg-slate-900 px-5 py-4 border-b border-slate-100 dark:border-slate-800 rounded-b-3xl">
                     <input type="text" id="editor-title" placeholder="Subjek Dokumen..." class="w-full text-2xl font-bold bg-transparent border-none outline-none text-slate-900 dark:text-white placeholder-slate-300 focus:ring-0 px-0 mb-3" />
-                    <div class="flex items-center gap-2 text-slate-500 text-sm bg-slate-50 dark:bg-slate-950 p-2 rounded-lg border border-slate-100 dark:border-slate-800 inline-flex">
+                    <div class="flex items-center gap-2 text-slate-500 text-sm bg-slate-50 dark:bg-slate-950 p-2 rounded-xl border border-slate-100 dark:border-slate-800 inline-flex">
                         <i data-lucide="calendar" class="w-4 h-4"></i>
                         <input type="datetime-local" id="editor-date" class="bg-transparent border-none outline-none focus:ring-0 text-slate-700 dark:text-slate-300 cursor-pointer p-0 font-medium text-xs" />
                     </div>
@@ -145,19 +145,19 @@
         <!-- ================= VIEWER VIEW ================= -->
         <div id="view-viewer" class="hidden flex flex-col h-full w-full absolute inset-0 z-40 bg-white dark:bg-slate-900 animate-in">
             <div class="flex justify-between items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-safe shadow-sm">
-                <button onclick="closeViewer()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full"><i data-lucide="arrow-left"></i></button>
+                <button onclick="closeViewer()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl"><i data-lucide="arrow-left"></i></button>
                 <span id="viewer-type-label" class="font-semibold text-xs tracking-widest text-slate-400 uppercase">Dokumen</span>
                 <div class="flex gap-2 items-center">
-                    <button onclick="shareDoc()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all active:scale-95" title="Bagikan"><i data-lucide="share-2" class="w-4 h-4"></i></button>
-                    <button id="btn-use-template" onclick="useTemplate()" class="hidden p-2 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 rounded-full transition-all active:scale-95" title="Gunakan Template"><i data-lucide="file-plus" class="w-4 h-4"></i></button>
-                    <button id="btn-edit-doc" onclick="editCurrentNote()" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full transition-all active:scale-95" title="Edit"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                    <button onclick="shareDoc()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all active:scale-95" title="Bagikan"><i data-lucide="share-2" class="w-4 h-4"></i></button>
+                    <button id="btn-use-template" onclick="useTemplate()" class="hidden p-2 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 rounded-2xl transition-all active:scale-95" title="Gunakan Template"><i data-lucide="file-plus" class="w-4 h-4"></i></button>
+                    <button id="btn-edit-doc" onclick="editCurrentNote()" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-2xl transition-all active:scale-95" title="Edit"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
                     <button onclick="copyViewerText()" id="btn-copy" class="flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold transition-all bg-blue-600 text-white">
                         <i data-lucide="copy" class="w-4 h-4 icon-copy"></i> <span class="text-copy">Salin</span>
                     </button>
                 </div>
             </div>
             <div class="flex-1 overflow-y-auto p-6 scroll-smooth relative">
-                <button id="btn-script-filter" onclick="openScriptView()" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-2xl mb-6 shadow-lg active:scale-[0.98] transition-all font-bold text-sm tracking-wide hidden">
+                <button id="btn-script-filter" onclick="openScriptView()" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-3xl mb-6 shadow-lg active:scale-[0.98] transition-all font-bold text-sm tracking-wide hidden">
                     <i data-lucide="wand-2" class="w-5 h-5"></i> FILTER & BUAT NASKAH
                 </button>
                 <h1 id="viewer-title" class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 leading-snug"></h1>
@@ -169,16 +169,16 @@
         <!-- ================= SCRIPT TELEPROMPTER VIEW ================= -->
         <div id="view-script" class="hidden flex flex-col h-full w-full absolute inset-0 z-50 bg-slate-900 animate-zoom text-white">
             <div class="flex justify-between items-center px-4 py-3 border-b border-slate-700 bg-slate-800/90 backdrop-blur-md pt-safe">
-                <button onclick="closeScriptView()" class="p-2 text-slate-300 hover:bg-slate-700 rounded-full"><i data-lucide="arrow-left"></i></button>
+                <button onclick="closeScriptView()" class="p-2 text-slate-300 hover:bg-slate-700 rounded-2xl"><i data-lucide="arrow-left"></i></button>
                 <span class="font-bold text-xs tracking-widest uppercase text-emerald-400 flex items-center gap-2"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i> Mode Pembacaan</span>
                 <div class="w-10"></div>
             </div>
-            <div class="flex-1 overflow-y-auto p-8 scroll-smooth flex flex-col justify-center pb-20">
+            <div class="flex-1 overflow-y-auto p-8 scroll-smooth flex flex-col pb-20">
                 <div class="text-center mb-8">
                     <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Naskah Kesimpulan</h2>
                     <h1 id="script-title" class="text-2xl font-extrabold text-white leading-snug"></h1>
                 </div>
-                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-2xl relative">
+                <div class="bg-slate-800 p-6 rounded-3xl border border-slate-700 shadow-2xl relative">
                     <div class="absolute -top-4 -left-4 bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg"><i data-lucide="mic-2" class="w-4 h-4"></i></div>
                     <p class="text-lg leading-relaxed text-slate-300 italic mb-6">"Berdasarkan hasil diskusi kita pada kegiatan hari ini, izinkan saya membacakan rangkuman kesimpulan dan keputusan yang telah disepakati bersama:"</p>
                     <div id="script-points" class="space-y-4 mb-6"></div>
@@ -189,7 +189,7 @@
 
         <!-- ================= CUSTOM CONFIRM MODAL ================= -->
         <div id="confirm-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade">
-            <div class="bg-white dark:bg-slate-800 w-full max-w-[320px] rounded-2xl shadow-2xl p-6 animate-zoom border border-slate-200 dark:border-slate-700">
+            <div class="bg-white dark:bg-slate-800 w-full max-w-[320px] rounded-3xl shadow-2xl p-6 animate-zoom border border-slate-200 dark:border-slate-700">
                 <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2" id="modal-title">Konfirmasi</h3>
                 <p class="text-slate-500 dark:text-slate-400 mb-6 text-sm" id="modal-desc">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
                 <div class="flex justify-end gap-3">
@@ -216,7 +216,7 @@
             { icon: 'mic-2', label: 'Sambutan', text: "Assalamu’alaikum Warahmatullahi Wabarakatuh.\nSelamat pagi/siang/sore, dan salam sejahtera bagi kita semua.\n\nYang terhormat Bapak/Ibu Kepala Desa beserta jajaran perangkat desa,\nYang kami hormati tokoh agama, tokoh masyarakat, dan pimpinan lembaga desa,\nSerta rekan-rekan mahasiswa KKN yang saya banggakan.\n\nPuji syukur senantiasa kita panjatkan kehadirat Allah SWT, Tuhan Yang Maha Esa, karena atas rahmat dan karunia-Nya kita dapat berkumpul pada kesempatan yang baik ini dalam keadaan sehat walafiat. Salawat serta salam semoga senantiasa tercurahkan kepada junjungan kita, Nabi Muhammad SAW.\n\nMelalui kesempatan ini, saya mewakili seluruh jajaran panitia dan tim KKN mengucapkan terima kasih yang tak terhingga atas waktu, tenaga, fasilitas, dan bimbingan yang telah diberikan kepada kami. Kehadiran kami di desa ini pada hakikatnya bukan untuk menggurui, melainkan untuk belajar, berkolaborasi secara nyata, dan mengabdi demi kemajuan desa yang kita cintai ini bersama-sama...\n\n(Silakan lanjutkan sambutan spesifik di sini)" },
             { icon: 'target', label: 'Tujuan', text: "Adapun tujuan utama dari penyelenggaraan program dan kegiatan ini meliputi poin-poin berikut:\n\n1. Menggali dan mengoptimalkan potensi lokal desa melalui pendekatan akademis dan praktis agar berdaya guna secara ekonomi maupun sosial.\n2. Membangun sinergi yang kuat dan berkelanjutan antara perguruan tinggi, pemerintah desa, dan masyarakat luas dalam kerangka pembangunan inklusif.\n3. Memberikan solusi nyata dan tepat guna terhadap permasalahan yang ada di lapangan melalui penerapan ilmu pengetahuan dan teknologi (IPTEK).\n4. Meningkatkan kapasitas partisipatif masyarakat desa agar lebih mandiri dan proaktif dalam menghadapi tantangan ke depan.\n\nBesar harapan kami, keseluruhan output dari kegiatan hari ini dapat diimplementasikan dengan baik serta memberikan dampak positif jangka panjang bagi kesejahteraan masyarakat." },
             { icon: 'clock', label: 'Pembukaan', text: "--- PEMBUKAAN RAPAT / ACARA ---\n\nHari, Tanggal : [Isi Hari, DD/MM/YYYY]\nWaktu         : [00:00] WIB - Selesai\nTempat        : [Lokasi Rapat]\n\nAgenda Utama  :\n• Pembahasan teknis rancangan pelaksanaan program kerja.\n• Pembagian tugas pokok dan fungsi (Tupoksi) kepanitiaan.\n• Penetapan timeline kegiatan dan tenggat waktu (Deadline).\n\nPimpinan Rapat: [Nama Kordes/PJ]\nNotulis       : [Nama Sekretaris]\nJumlah Hadir  : [Jumlah] Orang (Daftar Absensi Terlampir)\n\n---------------------------------------\n\nRingkasan Diskusi, Arahan, & Aspirasi Forum:\n• " },
-            { icon: 'check-circle-2', label: 'Penutupan', text: "\n\n---------------------------------------\n--- KESIMPULAN & PENUTUPAN ---\n\nBerdasarkan musyawarah mufakat, berikut adalah Keputusan Final Forum:\n\n1. [Sebutkan keputusan 1 secara rinci dan terukur] (PIC: Nama Penanggung Jawab)\n2. [Sebutkan keputusan 2 beserta tahapan eksekusinya] (Target Selesai: DD/MM/YYYY)\n3. [Sebutkan keputusan 3 jika ada tindak lanjut krusial]\n\nRapat/Acara ini resmi ditutup pada pukul [00:00] WIB. Seluruh kesepakatan tertulis di atas telah dibacakan ulang, disetujui bersama oleh forum secara terbuka, dan bersifat mengikat untuk dilaksanakan dengan penuh rasa tanggung jawab oleh seluruh pihak yang ditunjuk.\n\nSekian dokumen notulensi ini dibuat sebagai arsip sah persidangan.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\nMengetahui dan Mengesahkan,\n\nPimpinan Rapat                                Notulis\n\n\n(_________________________)                   (_________________________)" }
+            { icon: 'check-circle-2', label: 'Penutupan', text: "\n\n---------------------------------------\n--- KESIMPULAN & PENUTUPAN ---\n\nBerdasarkan musyawarah mufakat, berikut adalah Keputusan Final Forum:\n\n1. [Sebutkan keputusan 1 secara rinci dan terukur] (PIC: Nama Penanggung Jawab)\n2. [Sebutkan keputusan 2 beserta tahapan eksekusinya] (Target Selesai: DD/MM/YYYY)\n3. [Sebutkan keputusan 3 jika ada tindak lanjut krusial]\n\nRapat/Acara ini resmi ditutup pada pukul [00:00] WIB. Seluruh kesepakatan tertulis di atas telah dibacakan ulang, disetujui bersama oleh forum secara terbuka, dan bersifat mengikat untuk dilaksanakan dengan penuh rasa tanggung jawab oleh seluruh pihak yang ditunjuk.\n\nSekian dokumen notulensi ini dibuat sebagai arsip sah persidangan.\n\nWassalamu'alaikum Wr. Wb.\n\nMengetahui dan Mengesahkan,\n\nPimpinan Rapat                                Notulis\n\n\n(_________________________)                   (_________________________)" }
         ];
 
         // 32 Default Template Disimpan ke Variabel Statis untuk Fallback
@@ -234,7 +234,7 @@
             { id: 't11', category: 'Pelaksanaan', title: '11. Surat Permohonan Peminjaman Tempat', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 011/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Permohonan Peminjaman Tempat/Fasilitas\n\nYth. Pengelola [Nama Gedung/Fasilitas]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSehubungan dengan program kerja KKN berupa "[Nama Kegiatan]", kami memohon izin untuk meminjam fasilitas berupa [Sebutkan spesifik: Balai Desa / Lapangan / Proyektor / Sound System] pada:\n\nHari, Tanggal : [Hari, DD/MM/YYYY]\nWaktu         : [Jam] WIB s.d. Selesai\n\nFasilitas tersebut akan kami gunakan dan kami pastikan kebersihannya serta dikembalikan dalam kondisi baik seperti semula.\n\nAtas izin yang diberikan, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nPenanggung Jawab Sarpras\n\n\n(Nama PJ Sarpras)` },
             { id: 't12', category: 'Pelaksanaan', title: '12. Surat Permohonan Narasumber', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 012/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : TOR (Term of Reference)\nHal       : Permohonan Menjadi Narasumber\n\nYth. [Nama Calon Narasumber beserta Gelar]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam rangka meningkatkan kapasitas warga melalui program kerja KKN, kami akan mengadakan kegiatan "[Nama Kegiatan]". Mengingat keahlian dan pengalaman Bapak/Ibu di bidang [Bidang Keahlian], kami bermaksud memohon kesediaan Bapak/Ibu untuk menjadi Narasumber dalam kegiatan tersebut, yang akan dilaksanakan pada:\n\nHari, Tanggal : [Hari, DD/MM/YYYY]\nWaktu         : [Jam] WIB\nTempat        : [Lokasi]\nTema Materi   : [Tema Spesifik]\n\nDemikian permohonan ini kami sampaikan. Kami sangat menantikan konfirmasi kesediaan Bapak/Ibu.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Panitia\n\n\n(Nama Panitia)` },
             { id: 't13', category: 'Sponsorship', title: '13. Pengajuan Permohonan Dana/Sponsor', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 013/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Proposal Sponsorship\nHal       : Permohonan Sponsor / Bantuan Dana\n\nYth. Pimpinan Instansi / Perusahaan [Nama Perusahaan]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nKami, tim KKN Universitas [Nama Kampus] yang mengabdi di Desa [Nama Desa], sedang mempersiapkan kegiatan puncak bertajuk "[Nama Kegiatan]". \n\nUntuk menyukseskan acara tersebut yang berdampak langsung bagi masyarakat, kami memohon kesediaan instansi/perusahaan yang Bapak/Ibu pimpin untuk dapat berpartisipasi sebagai sponsor/donatur. Adapun rincian anggaran dan bentuk penawaran kerjasama (kontraprestasi logo pada banner, umbul-umbul, dll) terlampir dalam proposal ini.\n\nBesar harapan kami Bapak/Ibu berkenan mendukung kegiatan ini. Atas perhatiannya kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Panitia                               Bendahara\n\n\n(Nama Panitia)                              (Nama Bendahara)` },
-            { id: 't14', category: 'Sponsorship', title: '14. Permohonan Bantuan Barang (In-Kind)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 014/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Daftar Kebutuhan Barang\nHal       : Permohonan Bantuan Barang/Peralatan\n\nYth. [Pimpinan Instansi/Donatur]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSehubungan dengan pelaksanaan program pengadaan fasilitas publik/penghijauan berupa "[Nama Program]", kami dari tim KKN Universitas [Nama Kampus] membutuhkan beberapa material pendukung.\n\nMelalui surat ini, kami memohon bantuan Bapak/Ibu berupa barang/peralatan (seperti bibit tanaman / cat / tempat sampah - sesuaikan dengan lampiran). Bantuan ini akan langsung diserahkan dan dikelola bersama warga Desa [Nama Desa].\n\nAtas partisipasi dan bantuan Bapak/Ibu, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
+            { id: 't14', category: 'Sponsorship', title: '14. Permohonan Bantuan Barang (In-Kind)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 014/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Daftar Kebutuhan Barang\nHal       : Permohonan Bantuan Barang/Peralatan\n\nYth. [Pimpinan Instansi/Donatur]\ndi Tempat\n\nAssalamu’alaikum Wr. Wb.\n\nSehubungan dengan pelaksanaan program pengadaan fasilitas publik/penghijauan berupa "[Nama Program]", kami dari tim KKN Universitas [Nama Kampus] membutuhkan beberapa material pendukung.\n\nMelalui surat ini, kami memohon bantuan Bapak/Ibu berupa barang/peralatan (seperti bibit tanaman / cat / tempat sampah - sesuaikan dengan lampiran). Bantuan ini akan langsung diserahkan dan dikelola bersama warga Desa [Nama Desa].\n\nAtas partisipasi dan bantuan Bapak/Ibu, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
             { id: 't15', category: 'Pelaksanaan', title: '15. Surat Permohonan Kerja Sama Institusi', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 015/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Draf MoU/Konsep Kerjasama\nHal       : Permohonan Kerja Sama Institusional\n\nYth. [Kepala Instansi/Lembaga Mitra]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam mengoptimalkan potensi desa dan keberlanjutan program KKN, kami bermaksud mengajukan permohonan kerja sama antara kelompok KKN Universitas [Nama Kampus] Desa [Nama Desa] dengan instansi yang Bapak/Ibu pimpin dalam program "[Nama Program Bersama]".\n\nKerja sama ini diharapkan bersifat mutualisme. Bentuk teknis pelaksanaan terlampir dalam dokumen konsep kerjasama.\n\nDemikian permohonan ini kami ajukan untuk ditindaklanjuti.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua)` },
             { id: 't16', category: 'Pelaksanaan', title: '16. Surat Tugas Panitia Internal KKN', content: `[KOP SURAT KELOMPOK KKN]\n\nSURAT TUGAS\nNomor: 016/KKN-[Desa]/[Bulan Romawi]/[Tahun]\n\nKetua Kelompok KKN Universitas [Nama Kampus] Desa [Nama Desa] dengan ini menugaskan:\n\nNama : [Nama Anggota]\nNIM  : [NIM]\nDivisi: [Nama Divisi]\n\nUntuk bertindak sebagai Person In Charge (PIC) sekaligus Panitia Utama dalam penyelenggaraan program "[Nama Program]" yang dilaksanakan pada [Tanggal Pelaksanaan].\n\nKepada yang bersangkutan diwajibkan untuk menjalankan tugas dengan penuh tanggung jawab dan melaporkan hasilnya kepada Ketua Kelompok.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
             { id: 't17', category: 'Pelaksanaan', title: '17. Surat Dispensasi Izin Anggota', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 017/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Permohonan Dispensasi Tidak Mengikuti KKN\n\nYth. Dosen Pembimbing Lapangan (DPL)\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDengan ini kami memberitahukan bahwa anggota kelompok kami:\nNama : [Nama Anggota]\nNIM  : [NIM]\n\nMemohon dispensasi izin tidak dapat berada di posko KKN selama [Jumlah] hari, terhitung tanggal [Tanggal Mulai] s.d. [Tanggal Selesai], dikarenakan [Alasan yang jelas dan mendesak, misal: Sakit/Urusan Keluarga/Ujian Susulan].\n\nDemikian permohonan dispensasi ini kami sampaikan agar menjadi maklum.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN                                 Mahasiswa Ybs,\n\n\n(Nama Ketua)                              (Nama Anggota)` },
@@ -349,8 +349,8 @@
                 state.notes.forEach(note => {
                     const vId = 'vitem-' + note.id;
                     virtualStore[vId] = `
-                        <div class="relative w-full text-left p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition-all group block">
-                            <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 rounded-l-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="relative w-full text-left p-4 bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200/60 dark:border-slate-800 hover:border-blue-400 transition-all group block">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 rounded-l-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                             <div onclick="openViewer('${note.id}')" class="cursor-pointer pr-10">
                                 <h3 class="font-bold text-slate-900 dark:text-white mb-1.5 line-clamp-1">${note.title}</h3>
                                 <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-3">${note.content.replace(/[*_~#\`]/g, '')}</p>
@@ -359,7 +359,7 @@
                                     <span class="text-blue-500">Buka <i data-lucide="chevron-right" class="w-3 h-3 inline"></i></span>
                                 </div>
                             </div>
-                            <button onclick="event.stopPropagation(); triggerDelete('${note.id}', 'note')" class="absolute top-3 right-3 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="event.stopPropagation(); triggerDelete('${note.id}', 'note')" class="absolute top-3 right-3 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-2xl transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     `;
                     html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
@@ -369,11 +369,11 @@
             else if (state.activeTab === 'tasks') {
                 html += `
                     <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 px-1">Delegasi & Tugas</h2>
-                    <form id="form-task" class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-3 mb-4">
-                        <input id="input-task-text" required placeholder="Tindak lanjut rapat..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
+                    <form id="form-task" class="bg-white dark:bg-slate-900 p-5 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm flex flex-col gap-3 mb-5">
+                        <input id="input-task-text" required placeholder="Tindak lanjut rapat..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white" />
                         <div class="flex gap-2">
-                            <input id="input-task-pic" required placeholder="Nama PIC" class="flex-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
-                            <button type="submit" class="bg-blue-600 text-white font-bold text-sm px-4 py-2 rounded-lg active:scale-95">Tambah</button>
+                            <input id="input-task-pic" required placeholder="Nama PIC" class="flex-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white" />
+                            <button type="submit" class="bg-blue-600 text-white font-bold text-sm px-4 py-3 rounded-xl active:scale-95 transition-all">Tambah</button>
                         </div>
                     </form><div class="space-y-3">`;
                 state.tasks.forEach(task => {
@@ -383,13 +383,13 @@
                     const iconName = task.done ? 'check-square' : 'circle';
                     const textClass = task.done ? 'line-through text-slate-500' : 'text-slate-800 dark:text-slate-200';
                     virtualStore[vId] = `
-                        <div class="relative flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm ${statusClass} group transition-all pr-12">
-                            <button onclick="toggleTask('${task.id}')" class="${iconClass} cursor-pointer p-1 active:scale-95"><i data-lucide="${iconName}" class="w-5 h-5"></i></button>
+                        <div class="relative flex items-center gap-3 p-5 min-h-[90px] rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm ${statusClass} group transition-all pr-14">
+                            <button onclick="toggleTask('${task.id}')" class="${iconClass} cursor-pointer p-1 active:scale-95 transition-transform"><i data-lucide="${iconName}" class="w-6 h-6"></i></button>
                             <div onclick="toggleTask('${task.id}')" class="flex-1 cursor-pointer">
-                                <p class="text-sm font-semibold mb-1 ${textClass}">${task.text}</p>
-                                <span class="text-[10px] font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded uppercase">PIC: ${task.pic}</span>
+                                <p class="text-[15px] font-semibold mb-1.5 ${textClass}">${task.text}</p>
+                                <span class="text-[10px] font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2.5 py-1 rounded-md uppercase tracking-wider">PIC: ${task.pic}</span>
                             </div>
-                            <button onclick="event.stopPropagation(); triggerDelete('${task.id}', 'task')" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="event.stopPropagation(); triggerDelete('${task.id}', 'task')" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-2xl transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     `;
                     html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
@@ -399,15 +399,15 @@
             else if (state.activeTab === 'agenda') {
                 html += `
                     <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 px-1">Timeline Kegiatan</h2>
-                    <form id="form-agenda" class="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm flex flex-col gap-3">
-                        <input id="input-agenda-text" required placeholder="Nama Kegiatan (Misal: Senam Bersama)" class="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
+                    <form id="form-agenda" class="bg-emerald-50 dark:bg-emerald-900/10 p-5 rounded-3xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm flex flex-col gap-3">
+                        <input id="input-agenda-text" required placeholder="Nama Kegiatan (Misal: Senam Bersama)" class="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white" />
                         <div class="flex gap-2">
-                            <input id="input-agenda-date" type="date" required class="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
-                            <input id="input-agenda-loc" placeholder="Lokasi" class="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
+                            <input id="input-agenda-date" type="date" required class="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white" />
+                            <input id="input-agenda-loc" placeholder="Lokasi" class="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white" />
                         </div>
-                        <button type="submit" class="w-full bg-emerald-600 text-white font-bold text-sm px-4 py-2 rounded-lg active:scale-95 mt-1">Set Jadwal</button>
+                        <button type="submit" class="w-full bg-emerald-600 text-white font-bold text-sm px-5 py-3 rounded-xl active:scale-95 transition-all mt-1">Set Jadwal</button>
                     </form>
-                    <div class="border-l-2 border-emerald-200 dark:border-emerald-900/50 ml-3 pl-4 space-y-4 mt-6">`;
+                    <div class="border-l-[3px] border-emerald-200 dark:border-emerald-900/50 ml-4 pl-5 space-y-4 mt-8">`;
                 if (state.agenda.length === 0) html += `<p class="text-slate-400 text-sm italic">Belum ada agenda diset.</p>`;
                 state.agenda.forEach(ag => {
                     const vId = 'vitem-' + ag.id;
@@ -419,16 +419,16 @@
                     const iconClass = isDone ? 'text-emerald-500' : 'text-slate-300';
                     
                     virtualStore[vId] = `
-                        <div class="relative ${statusClass} p-4 pr-12 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all group">
-                            <div class="absolute -left-[23px] top-5 w-3 h-3 ${dotClass} rounded-full ring-4 ring-slate-50 dark:ring-slate-950 transition-colors"></div>
-                            <div class="flex items-start gap-3 cursor-pointer" onclick="toggleAgenda('${ag.id}')">
-                                <button class="mt-0.5 ${iconClass}"><i data-lucide="${iconName}" class="w-5 h-5"></i></button>
+                        <div class="relative ${statusClass} p-5 min-h-[95px] pr-14 rounded-3xl border border-slate-200/60 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group">
+                            <div class="absolute -left-[30px] top-6 w-3.5 h-3.5 ${dotClass} rounded-full ring-4 ring-slate-50 dark:ring-slate-950 transition-colors"></div>
+                            <div class="flex items-start gap-3.5 cursor-pointer" onclick="toggleAgenda('${ag.id}')">
+                                <button class="mt-0.5 ${iconClass} active:scale-95 transition-transform"><i data-lucide="${iconName}" class="w-5 h-5"></i></button>
                                 <div class="flex-1">
-                                    <h3 class="font-bold ${textClass} transition-colors">${ag.text}</h3>
-                                    <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5"><i data-lucide="calendar-days" class="w-3 h-3"></i> ${new Date(ag.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'short'})} • ${ag.location || 'Lokasi Belum Ditentukan'}</p>
+                                    <h3 class="font-bold text-[15px] ${textClass} transition-colors leading-snug">${ag.text}</h3>
+                                    <p class="text-xs text-slate-500 font-semibold mt-1.5 flex items-center gap-1.5"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i> ${new Date(ag.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'short'})} • ${ag.location || 'Lokasi Belum Ditentukan'}</p>
                                 </div>
                             </div>
-                            <button onclick="event.stopPropagation(); triggerDelete('${ag.id}', 'agenda')" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="event.stopPropagation(); triggerDelete('${ag.id}', 'agenda')" class="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-2xl transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     `;
                     html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
@@ -440,12 +440,12 @@
                 state.templates.forEach(template => {
                     const vId = 'vitem-' + template.id;
                     virtualStore[vId] = `
-                        <div class="relative w-full text-left p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-400 active:scale-[0.98] flex items-center pr-12 transition-all group">
-                            <div onclick="openViewer('${template.id}', true)" class="flex-1 cursor-pointer flex items-center gap-3">
-                                <div class="bg-blue-50 dark:bg-blue-900/30 p-2 rounded-lg text-blue-600"><i data-lucide="file-text" class="w-[18px] h-[18px]"></i></div>
-                                <span class="flex-1 font-bold text-sm text-slate-800 dark:text-slate-200 line-clamp-1">${template.title}</span>
+                        <div class="relative w-full text-left p-5 min-h-[85px] bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200/60 dark:border-slate-800 hover:shadow-md active:scale-[0.98] flex items-center pr-14 transition-all group">
+                            <div onclick="openViewer('${template.id}', true)" class="flex-1 cursor-pointer flex items-center gap-4">
+                                <div class="bg-blue-50 dark:bg-blue-900/30 p-2.5 rounded-xl text-blue-600"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+                                <span class="flex-1 font-bold text-[14px] text-slate-800 dark:text-slate-200 line-clamp-2 leading-snug">${template.title}</span>
                             </div>
-                            <button onclick="event.stopPropagation(); triggerDelete('${template.id}', 'template')" class="absolute right-3 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            <button onclick="event.stopPropagation(); triggerDelete('${template.id}', 'template')" class="absolute right-4 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-2xl transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     `;
                     html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
@@ -546,8 +546,8 @@
                 const btn = document.createElement('button');
                 btn.type = 'button'; 
                 btn.className = item.label === 'Poin' 
-                    ? "flex-shrink-0 flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm"
-                    : "flex-shrink-0 flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm";
+                    ? "flex-shrink-0 flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-xl text-sm font-bold active:scale-95 shadow-sm transition-all"
+                    : "flex-shrink-0 flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 px-4 py-2.5 rounded-xl text-sm font-bold active:scale-95 shadow-sm transition-all";
                 btn.innerHTML = `<i data-lucide="${item.icon}" class="w-4 h-4"></i> ${item.label}`;
                 
                 btn.onclick = () => insertToEditor(item.text);
@@ -556,20 +556,20 @@
             });
 
             const divider = document.createElement('div');
-            divider.className = "w-px h-6 bg-slate-300 dark:bg-slate-700 mx-1 flex-shrink-0";
+            divider.className = "w-px h-6 bg-slate-300 dark:bg-slate-700 mx-2 flex-shrink-0";
             qib.appendChild(divider);
 
             const btnUndo = document.createElement('button');
             btnUndo.type = 'button';
             btnUndo.id = 'btn-editor-undo';
-            btnUndo.className = "hidden flex-shrink-0 flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-400 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm";
+            btnUndo.className = "hidden flex-shrink-0 flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-400 px-4 py-2.5 rounded-xl text-sm font-bold active:scale-95 shadow-sm transition-all";
             btnUndo.innerHTML = `<i data-lucide="undo-2" class="w-4 h-4"></i> Batal Hapus`;
             btnUndo.onclick = restoreEditorContent;
             qib.appendChild(btnUndo);
 
             const btnClear = document.createElement('button');
             btnClear.type = 'button';
-            btnClear.className = "flex-shrink-0 flex items-center gap-2 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm";
+            btnClear.className = "flex-shrink-0 flex items-center gap-2 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-4 py-2.5 rounded-xl text-sm font-bold active:scale-95 shadow-sm transition-all";
             btnClear.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i> Hapus Semua`;
             btnClear.onclick = clearEditorContent;
             qib.appendChild(btnClear);
@@ -749,9 +749,9 @@
             finalPoints.forEach(pt => {
                 const text = pt.replace(/^[•\-\*\d\.]+\s*/, '');
                 container.innerHTML += `
-                    <div class="flex gap-3 items-start">
-                        <span class="text-emerald-400 mt-1"><i data-lucide="check-circle-2" class="w-5 h-5"></i></span>
-                        <span class="text-xl font-bold text-white leading-relaxed">${text}</span>
+                    <div class="flex gap-4 items-start">
+                        <span class="text-emerald-400 mt-1.5"><i data-lucide="check-circle-2" class="w-6 h-6"></i></span>
+                        <span class="text-[19px] font-bold text-white leading-relaxed">${text}</span>
                     </div>`;
             });
             
@@ -765,6 +765,8 @@
         function addTask(text, pic) {
             state.tasks.unshift({ id: Date.now().toString(), text, pic, done: false });
             saveData(); renderContent();
+            document.getElementById('input-task-text').value = '';
+            document.getElementById('input-task-pic').value = '';
         }
 
         function toggleTask(id) {
@@ -776,6 +778,8 @@
             state.agenda.push({ id: Date.now().toString(), text, date, location, done: false });
             state.agenda.sort((a, b) => new Date(a.date) - new Date(b.date));
             saveData(); renderContent();
+            document.getElementById('input-agenda-text').value = '';
+            document.getElementById('input-agenda-loc').value = '';
         }
 
         function toggleAgenda(id) {
