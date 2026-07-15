@@ -1,4 +1,5 @@
-const CACHE_NAME = 'kknku-pro-v4'; // Penambahan iterasi cache untuk mendobrak statika peramban
+// sw.js
+const CACHE_NAME = 'kknku-pro-v5';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -8,7 +9,6 @@ const ASSETS_TO_CACHE = [
 ];
 
 self.addEventListener('install', (event) => {
-    // Instalasi seketika, namun aktivasi dikendalikan oleh instruksi klien
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return Promise.allSettled(
@@ -30,7 +30,6 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Listener Khusus Pembaruan Sinkron: Memaksa transisi dari 'waiting' ke 'active'
 self.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
@@ -38,7 +37,6 @@ self.addEventListener('message', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    // Mode Khusus HTML: Network-First untuk menjamin validasi pembaruan kode 
     if (event.request.mode === 'navigate') {
         event.respondWith(
             fetch(event.request).then((networkResponse) => {
@@ -51,7 +49,6 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Aset Statis (CSS, JS, Gambar): Cache-First dengan fallback Network
     event.respondWith(
         caches.match(event.request).then((response) => {
             return response || fetch(event.request).then((networkResponse) => {
