@@ -13,16 +13,16 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://kknku.app/">
     <meta property="og:title" content="KKNKU - Sekretariat Pro">
-    <meta property="og:description" content="Dashboard Sekretariat Pro untuk Mahasiswa KKN. Kelola arsip, delegasi tugas, timeline kegiatan, dan persuratan otomatis dalam satu aplikasi PWA.">
-    <meta property="og:image" content="https://kknku.app/icon-512x512.png">
+    <meta property="og:description" content="Aplikasi Sekretariat Mahasiswa KKN Cerdas. Integrasi notulensi, persuratan otomatis, dan penjadwalan.">
+    <meta property="og:image" content="https://kknku.app/icon.png">
     <meta property="og:site_name" content="KKNKU">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kknku.app/">
     <meta property="twitter:title" content="KKNKU - Sekretariat Pro">
-    <meta property="twitter:description" content="Dashboard Sekretariat Pro untuk Mahasiswa KKN. Kelola arsip, delegasi tugas, timeline kegiatan, dan persuratan otomatis dalam satu aplikasi PWA.">
-    <meta property="twitter:image" content="https://kknku.app/icon-512x512.png">
+    <meta property="twitter:description" content="Aplikasi Sekretariat Mahasiswa KKN Cerdas. Integrasi notulensi, persuratan otomatis, dan penjadwalan.">
+    <meta property="twitter:image" content="https://kknku.app/icon.png">
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
@@ -49,15 +49,17 @@
         
         @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(16px); } 100% { opacity: 1; transform: translateY(0); } }
         @keyframes zoomIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         
         .animate-in { animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-zoom { animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade { animation: fadeIn 0.2s ease-out forwards; }
         
         input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
         .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); }
     </style>
 </head>
-<body class="w-full h-[100dvh] overflow-hidden flex justify-center text-slate-900 dark:text-white font-sans selection:bg-blue-200 dark:selection:bg-blue-900">
+<body class="w-full h-[100dvh] overflow-hidden flex justify-center text-slate-900 dark:text-white font-sans selection:bg-blue-200 dark:selection:bg-blue-900 relative">
 
     <div id="app-container" class="w-full max-w-md h-full bg-slate-50 dark:bg-slate-950 flex flex-col relative shadow-2xl transition-colors duration-300 overflow-hidden">
         
@@ -122,7 +124,7 @@
         <div id="view-editor" class="hidden flex flex-col h-full w-full absolute inset-0 z-50 bg-slate-50 dark:bg-slate-950 animate-in">
             <div class="flex justify-between items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-safe">
                 <button onclick="closeEditor()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"><i data-lucide="arrow-left"></i></button>
-                <span class="font-bold text-xs tracking-widest uppercase text-slate-800 dark:text-slate-200">Editor Arsip</span>
+                <span id="editor-type-label" class="font-bold text-xs tracking-widest uppercase text-slate-800 dark:text-slate-200">Editor Arsip</span>
                 <button onclick="saveNote()" class="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/40 rounded-full active:scale-95 transition-all"><i data-lucide="check"></i></button>
             </div>
             <div class="flex-1 overflow-y-auto flex flex-col">
@@ -145,8 +147,10 @@
             <div class="flex justify-between items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-safe shadow-sm">
                 <button onclick="closeViewer()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full"><i data-lucide="arrow-left"></i></button>
                 <span id="viewer-type-label" class="font-semibold text-xs tracking-widest text-slate-400 uppercase">Dokumen</span>
-                <div class="flex gap-2">
-                    <button id="btn-edit-doc" onclick="editCurrentNote()" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                <div class="flex gap-2 items-center">
+                    <button onclick="shareDoc()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all active:scale-95" title="Bagikan"><i data-lucide="share-2" class="w-4 h-4"></i></button>
+                    <button id="btn-use-template" onclick="useTemplate()" class="hidden p-2 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 rounded-full transition-all active:scale-95" title="Gunakan Template"><i data-lucide="file-plus" class="w-4 h-4"></i></button>
+                    <button id="btn-edit-doc" onclick="editCurrentNote()" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full transition-all active:scale-95" title="Edit"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
                     <button onclick="copyViewerText()" id="btn-copy" class="flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold transition-all bg-blue-600 text-white">
                         <i data-lucide="copy" class="w-4 h-4 icon-copy"></i> <span class="text-copy">Salin</span>
                     </button>
@@ -183,40 +187,40 @@
             </div>
         </div>
 
+        <!-- ================= CUSTOM CONFIRM MODAL ================= -->
+        <div id="confirm-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade">
+            <div class="bg-white dark:bg-slate-800 w-full max-w-[320px] rounded-2xl shadow-2xl p-6 animate-zoom border border-slate-200 dark:border-slate-700">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2" id="modal-title">Konfirmasi</h3>
+                <p class="text-slate-500 dark:text-slate-400 mb-6 text-sm" id="modal-desc">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</p>
+                <div class="flex justify-end gap-3">
+                    <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">Batal</button>
+                    <button id="modal-confirm-btn" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-red-600 hover:bg-red-700 transition-colors">Hapus</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // TEKS INSTAN - Diperbarui agar lebih panjang, formal, dan utuh.
+        // Pendaftaran Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW Registered!', reg.scope))
+                    .catch(err => console.error('SW Failed!', err));
+            });
+        }
+
         const QUICK_INSERT_TEXTS = [
-            { 
-                icon: 'list', 
-                label: 'Poin', 
-                text: "\n• " 
-            },
-            { 
-                icon: 'mic-2', 
-                label: 'Sambutan', 
-                text: "Assalamu’alaikum Warahmatullahi Wabarakatuh.\nSelamat pagi/siang/sore, dan salam sejahtera bagi kita semua.\n\nYang terhormat Bapak/Ibu Kepala Desa beserta jajaran perangkat desa,\nYang kami hormati tokoh agama, tokoh masyarakat, dan pimpinan lembaga desa,\nSerta rekan-rekan mahasiswa KKN yang saya banggakan.\n\nPuji syukur senantiasa kita panjatkan kehadirat Allah SWT, Tuhan Yang Maha Esa, karena atas rahmat dan karunia-Nya kita dapat berkumpul pada kesempatan yang baik ini dalam keadaan sehat walafiat. Salawat serta salam semoga senantiasa tercurahkan kepada junjungan kita, Nabi Muhammad SAW.\n\nMelalui kesempatan ini, saya mewakili seluruh jajaran panitia dan tim KKN mengucapkan terima kasih yang tak terhingga atas waktu, tenaga, fasilitas, dan bimbingan yang telah diberikan kepada kami. Kehadiran kami di desa ini pada hakikatnya bukan untuk menggurui, melainkan untuk belajar, berkolaborasi secara nyata, dan mengabdi demi kemajuan desa yang kita cintai ini bersama-sama...\n\n(Silakan lanjutkan sambutan spesifik di sini)" 
-            },
-            { 
-                icon: 'target', 
-                label: 'Tujuan', 
-                text: "Adapun tujuan utama dari penyelenggaraan program dan kegiatan ini meliputi poin-poin berikut:\n\n1. Menggali dan mengoptimalkan potensi lokal desa melalui pendekatan akademis dan praktis agar berdaya guna secara ekonomi maupun sosial.\n2. Membangun sinergi yang kuat dan berkelanjutan antara perguruan tinggi, pemerintah desa, dan masyarakat luas dalam kerangka pembangunan inklusif.\n3. Memberikan solusi nyata dan tepat guna terhadap permasalahan yang ada di lapangan melalui penerapan ilmu pengetahuan dan teknologi (IPTEK).\n4. Meningkatkan kapasitas partisipatif masyarakat desa agar lebih mandiri dan proaktif dalam menghadapi tantangan ke depan.\n\nBesar harapan kami, keseluruhan output dari kegiatan hari ini dapat diimplementasikan dengan baik serta memberikan dampak positif jangka panjang bagi kesejahteraan masyarakat." 
-            },
-            { 
-                icon: 'clock', 
-                label: 'Pembukaan', 
-                text: "--- PEMBUKAAN RAPAT / ACARA ---\n\nHari, Tanggal : [Isi Hari, DD/MM/YYYY]\nWaktu         : [00:00] WIB - Selesai\nTempat        : [Lokasi Rapat]\n\nAgenda Utama  :\n• Pembahasan teknis rancangan pelaksanaan program kerja.\n• Pembagian tugas pokok dan fungsi (Tupoksi) kepanitiaan.\n• Penetapan timeline kegiatan dan tenggat waktu (Deadline).\n\nPimpinan Rapat: [Nama Kordes/PJ]\nNotulis       : [Nama Sekretaris]\nJumlah Hadir  : [Jumlah] Orang (Daftar Absensi Terlampir)\n\n---------------------------------------\n\nRingkasan Diskusi, Arahan, & Aspirasi Forum:\n• " 
-            },
-            { 
-                icon: 'check-circle-2', 
-                label: 'Penutupan', 
-                text: "\n\n---------------------------------------\n--- KESIMPULAN & PENUTUPAN ---\n\nBerdasarkan musyawarah mufakat, berikut adalah Keputusan Final Forum:\n\n1. [Sebutkan keputusan 1 secara rinci dan terukur] (PIC: Nama Penanggung Jawab)\n2. [Sebutkan keputusan 2 beserta tahapan eksekusinya] (Target Selesai: DD/MM/YYYY)\n3. [Sebutkan keputusan 3 jika ada tindak lanjut krusial]\n\nRapat/Acara ini resmi ditutup pada pukul [00:00] WIB. Seluruh kesepakatan tertulis di atas telah dibacakan ulang, disetujui bersama oleh forum secara terbuka, dan bersifat mengikat untuk dilaksanakan dengan penuh rasa tanggung jawab oleh seluruh pihak yang ditunjuk.\n\nSekian dokumen notulensi ini dibuat sebagai arsip sah persidangan.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\nMengetahui dan Mengesahkan,\n\nPimpinan Rapat                                Notulis\n\n\n(_________________________)                   (_________________________)" 
-            }
+            { icon: 'list', label: 'Poin', text: "\n• " },
+            { icon: 'mic-2', label: 'Sambutan', text: "Assalamu’alaikum Warahmatullahi Wabarakatuh.\nSelamat pagi/siang/sore, dan salam sejahtera bagi kita semua.\n\nYang terhormat Bapak/Ibu Kepala Desa beserta jajaran perangkat desa,\nYang kami hormati tokoh agama, tokoh masyarakat, dan pimpinan lembaga desa,\nSerta rekan-rekan mahasiswa KKN yang saya banggakan.\n\nPuji syukur senantiasa kita panjatkan kehadirat Allah SWT, Tuhan Yang Maha Esa, karena atas rahmat dan karunia-Nya kita dapat berkumpul pada kesempatan yang baik ini dalam keadaan sehat walafiat. Salawat serta salam semoga senantiasa tercurahkan kepada junjungan kita, Nabi Muhammad SAW.\n\nMelalui kesempatan ini, saya mewakili seluruh jajaran panitia dan tim KKN mengucapkan terima kasih yang tak terhingga atas waktu, tenaga, fasilitas, dan bimbingan yang telah diberikan kepada kami. Kehadiran kami di desa ini pada hakikatnya bukan untuk menggurui, melainkan untuk belajar, berkolaborasi secara nyata, dan mengabdi demi kemajuan desa yang kita cintai ini bersama-sama...\n\n(Silakan lanjutkan sambutan spesifik di sini)" },
+            { icon: 'target', label: 'Tujuan', text: "Adapun tujuan utama dari penyelenggaraan program dan kegiatan ini meliputi poin-poin berikut:\n\n1. Menggali dan mengoptimalkan potensi lokal desa melalui pendekatan akademis dan praktis agar berdaya guna secara ekonomi maupun sosial.\n2. Membangun sinergi yang kuat dan berkelanjutan antara perguruan tinggi, pemerintah desa, dan masyarakat luas dalam kerangka pembangunan inklusif.\n3. Memberikan solusi nyata dan tepat guna terhadap permasalahan yang ada di lapangan melalui penerapan ilmu pengetahuan dan teknologi (IPTEK).\n4. Meningkatkan kapasitas partisipatif masyarakat desa agar lebih mandiri dan proaktif dalam menghadapi tantangan ke depan.\n\nBesar harapan kami, keseluruhan output dari kegiatan hari ini dapat diimplementasikan dengan baik serta memberikan dampak positif jangka panjang bagi kesejahteraan masyarakat." },
+            { icon: 'clock', label: 'Pembukaan', text: "--- PEMBUKAAN RAPAT / ACARA ---\n\nHari, Tanggal : [Isi Hari, DD/MM/YYYY]\nWaktu         : [00:00] WIB - Selesai\nTempat        : [Lokasi Rapat]\n\nAgenda Utama  :\n• Pembahasan teknis rancangan pelaksanaan program kerja.\n• Pembagian tugas pokok dan fungsi (Tupoksi) kepanitiaan.\n• Penetapan timeline kegiatan dan tenggat waktu (Deadline).\n\nPimpinan Rapat: [Nama Kordes/PJ]\nNotulis       : [Nama Sekretaris]\nJumlah Hadir  : [Jumlah] Orang (Daftar Absensi Terlampir)\n\n---------------------------------------\n\nRingkasan Diskusi, Arahan, & Aspirasi Forum:\n• " },
+            { icon: 'check-circle-2', label: 'Penutupan', text: "\n\n---------------------------------------\n--- KESIMPULAN & PENUTUPAN ---\n\nBerdasarkan musyawarah mufakat, berikut adalah Keputusan Final Forum:\n\n1. [Sebutkan keputusan 1 secara rinci dan terukur] (PIC: Nama Penanggung Jawab)\n2. [Sebutkan keputusan 2 beserta tahapan eksekusinya] (Target Selesai: DD/MM/YYYY)\n3. [Sebutkan keputusan 3 jika ada tindak lanjut krusial]\n\nRapat/Acara ini resmi ditutup pada pukul [00:00] WIB. Seluruh kesepakatan tertulis di atas telah dibacakan ulang, disetujui bersama oleh forum secara terbuka, dan bersifat mengikat untuk dilaksanakan dengan penuh rasa tanggung jawab oleh seluruh pihak yang ditunjuk.\n\nSekian dokumen notulensi ini dibuat sebagai arsip sah persidangan.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\nMengetahui dan Mengesahkan,\n\nPimpinan Rapat                                Notulis\n\n\n(_________________________)                   (_________________________)" }
         ];
 
-        // 32 TEMPLATE
-        const KKN_TEMPLATES = [
+        // 32 Default Template Disimpan ke Variabel Statis untuk Fallback
+        const DEFAULT_TEMPLATES = [
             { id: 't1', category: 'Pra-KKN', title: '1. Surat Tugas Mahasiswa KKN', content: `[KOP SURAT KAMPUS/PANITIA KKN]\n\nNomor     : 001/ST-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : 1 Berkas\nHal       : Surat Tugas Mahasiswa KKN\n\nYth. Kepala Desa [Nama Desa]\nKecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDengan hormat, sehubungan dengan pelaksanaan Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] Tahun Akademik [Tahun], bersama ini kami menugaskan mahasiswa yang namanya tercantum dalam lampiran surat ini untuk melaksanakan program KKN di Desa [Nama Desa], mulai tanggal [Tanggal Mulai] s.d. [Tanggal Selesai].\n\nDemikian surat tugas ini dibuat agar dapat dipergunakan sebagaimana mestinya. Atas perhatian dan kerja sama Bapak/Ibu, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Kota Kampus], [Tanggal Surat]\nMengetahui,\nKetua LPPM / Panitia KKN\n\n\n(Nama Terang & Gelar)\nNIP. ....................` },
             { id: 't2', category: 'Pra-KKN', title: '2. Surat Pengantar/Penerjunan KKN', content: `[KOP SURAT KAMPUS]\n\nNomor     : 002/SP-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Surat Pengantar Penerjunan KKN\n\nYth. Kepala Desa [Nama Desa]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nBerdasarkan program Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], kami selaku Dosen Pembimbing Lapangan (DPL) secara resmi menyerahkan [Jumlah] mahasiswa KKN kepada pihak Pemerintah Desa [Nama Desa] untuk melaksanakan pengabdian masyarakat terhitung mulai [Tanggal Mulai] s.d. [Tanggal Selesai].\n\nKami memohon bimbingan, arahan, dan dukungan dari Bapak/Ibu selama mahasiswa berada di lokasi KKN. \n\nWassalamu'alaikum Wr. Wb.\n\n[Kota], [Tanggal]\nDosen Pembimbing Lapangan\n\n\n(Nama DPL & Gelar)\nNIP. ....................` },
             { id: 't3', category: 'Pra-KKN', title: '3. Surat Permohonan Izin Lokasi KKN', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 003/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Proposal KKN\nHal       : Permohonan Izin Lokasi KKN\n\nYth. Kepala Bakesbangpol / Bupati [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam rangka pelaksanaan Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], kami memohon izin untuk menjadikan Desa [Nama Desa], Kecamatan [Nama Kecamatan] sebagai lokasi pelaksanaan KKN pada [Tanggal Mulai] s.d. [Tanggal Selesai].\n\nBersama ini kami lampirkan proposal kegiatan sebagai bahan pertimbangan Bapak/Ibu. Atas perkenan dan izin yang diberikan, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Kota], [Tanggal]\nKetua Kelompok KKN                          Sekretaris\n\n\n(Nama Ketua)                                (Nama Sekretaris)` },
@@ -257,9 +261,12 @@
             notes: JSON.parse(localStorage.getItem('kknku_notes')) || [],
             tasks: JSON.parse(localStorage.getItem('kknku_tasks')) || [],
             agenda: JSON.parse(localStorage.getItem('kknku_agenda')) || [],
+            templates: JSON.parse(localStorage.getItem('kknku_templates')) || DEFAULT_TEMPLATES,
             editingNoteId: null,
+            editingType: 'note',
             viewingDoc: null,
-            editorUndoBuffer: ''
+            editorUndoBuffer: '',
+            deleteTarget: null // Payload untuk operasi penghapusan {id, type}
         };
 
         if (state.notes.length === 0 && state.tasks.length === 0 && state.agenda.length === 0) {
@@ -273,6 +280,7 @@
             localStorage.setItem('kknku_notes', JSON.stringify(state.notes));
             localStorage.setItem('kknku_tasks', JSON.stringify(state.tasks));
             localStorage.setItem('kknku_agenda', JSON.stringify(state.agenda));
+            localStorage.setItem('kknku_templates', JSON.stringify(state.templates));
         }
 
         function applyTheme() {
@@ -304,7 +312,7 @@
             renderContent();
         }
 
-        // ================= VIRTUALIZATION ENGINE (Strict DOM Culling) =================
+        // ================= VIRTUALIZATION ENGINE =================
         let virtualStore = {};
         let itemObserver = null;
 
@@ -341,15 +349,18 @@
                 state.notes.forEach(note => {
                     const vId = 'vitem-' + note.id;
                     virtualStore[vId] = `
-                        <button onclick="openViewer('${note.id}')" class="w-full text-left p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition-all active:scale-[0.98] relative overflow-hidden group block">
-                            <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <h3 class="font-bold text-slate-900 dark:text-white mb-1.5 line-clamp-1">${note.title}</h3>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-3">${note.content.replace(/[*_~#\`]/g, '')}</p>
-                            <div class="flex justify-between text-[11px] font-bold text-slate-400 uppercase">
-                                <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> ${new Date(note.date).toLocaleDateString('id-ID')}</span>
-                                <span class="text-blue-500">Buka <i data-lucide="chevron-right" class="w-3 h-3 inline"></i></span>
+                        <div class="relative w-full text-left p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition-all group block">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 rounded-l-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <div onclick="openViewer('${note.id}')" class="cursor-pointer pr-10">
+                                <h3 class="font-bold text-slate-900 dark:text-white mb-1.5 line-clamp-1">${note.title}</h3>
+                                <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-3">${note.content.replace(/[*_~#\`]/g, '')}</p>
+                                <div class="flex justify-between text-[11px] font-bold text-slate-400 uppercase">
+                                    <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> ${new Date(note.date).toLocaleDateString('id-ID')}</span>
+                                    <span class="text-blue-500">Buka <i data-lucide="chevron-right" class="w-3 h-3 inline"></i></span>
+                                </div>
                             </div>
-                        </button>
+                            <button onclick="event.stopPropagation(); triggerDelete('${note.id}', 'note')" class="absolute top-3 right-3 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
                     `;
                     html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
                 });
@@ -372,12 +383,13 @@
                     const iconName = task.done ? 'check-square' : 'circle';
                     const textClass = task.done ? 'line-through text-slate-500' : 'text-slate-800 dark:text-slate-200';
                     virtualStore[vId] = `
-                        <div onclick="toggleTask('${task.id}')" class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer active:scale-[0.98] ${statusClass}">
-                            <button class="mt-0.5 ${iconClass}"><i data-lucide="${iconName}" class="w-5 h-5"></i></button>
-                            <div>
+                        <div class="relative flex items-center gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm ${statusClass} group transition-all pr-12">
+                            <button onclick="toggleTask('${task.id}')" class="${iconClass} cursor-pointer p-1 active:scale-95"><i data-lucide="${iconName}" class="w-5 h-5"></i></button>
+                            <div onclick="toggleTask('${task.id}')" class="flex-1 cursor-pointer">
                                 <p class="text-sm font-semibold mb-1 ${textClass}">${task.text}</p>
                                 <span class="text-[10px] font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded uppercase">PIC: ${task.pic}</span>
                             </div>
+                            <button onclick="event.stopPropagation(); triggerDelete('${task.id}', 'task')" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     `;
                     html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
@@ -407,15 +419,16 @@
                     const iconClass = isDone ? 'text-emerald-500' : 'text-slate-300';
                     
                     virtualStore[vId] = `
-                        <div class="relative ${statusClass} p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer active:scale-[0.98] transition-all" onclick="toggleAgenda('${ag.id}')">
+                        <div class="relative ${statusClass} p-4 pr-12 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm transition-all group">
                             <div class="absolute -left-[23px] top-5 w-3 h-3 ${dotClass} rounded-full ring-4 ring-slate-50 dark:ring-slate-950 transition-colors"></div>
-                            <div class="flex items-start gap-3">
+                            <div class="flex items-start gap-3 cursor-pointer" onclick="toggleAgenda('${ag.id}')">
                                 <button class="mt-0.5 ${iconClass}"><i data-lucide="${iconName}" class="w-5 h-5"></i></button>
                                 <div class="flex-1">
                                     <h3 class="font-bold ${textClass} transition-colors">${ag.text}</h3>
                                     <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5"><i data-lucide="calendar-days" class="w-3 h-3"></i> ${new Date(ag.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'short'})} • ${ag.location || 'Lokasi Belum Ditentukan'}</p>
                                 </div>
                             </div>
+                            <button onclick="event.stopPropagation(); triggerDelete('${ag.id}', 'agenda')" class="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors active:scale-95"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                         </div>
                     `;
                     html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
@@ -423,15 +436,17 @@
                 html += `</div>`;
             }
             else if (state.activeTab === 'templates') {
-                html += `<h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 px-1 mb-4">Persuratan KKN</h2><div class="space-y-3">`;
-                KKN_TEMPLATES.forEach(template => {
+                html += `<div class="flex justify-between items-end mb-4 px-1"><h2 class="text-lg font-bold text-slate-800 dark:text-slate-200">Persuratan KKN</h2><span class="text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded-md">${state.templates.length} Surat</span></div><div class="space-y-3">`;
+                state.templates.forEach(template => {
                     const vId = 'vitem-' + template.id;
                     virtualStore[vId] = `
-                        <button onclick="openViewer('${template.id}', true)" class="w-full text-left p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-400 active:scale-[0.98] flex items-center gap-3">
-                            <div class="bg-blue-50 dark:bg-blue-900/30 p-2 rounded-lg text-blue-600"><i data-lucide="file-text" class="w-[18px] h-[18px]"></i></div>
-                            <span class="flex-1 font-bold text-sm text-slate-800 dark:text-slate-200 line-clamp-1">${template.title}</span>
-                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
-                        </button>
+                        <div class="relative w-full text-left p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-400 active:scale-[0.98] flex items-center pr-12 transition-all group">
+                            <div onclick="openViewer('${template.id}', true)" class="flex-1 cursor-pointer flex items-center gap-3">
+                                <div class="bg-blue-50 dark:bg-blue-900/30 p-2 rounded-lg text-blue-600"><i data-lucide="file-text" class="w-[18px] h-[18px]"></i></div>
+                                <span class="flex-1 font-bold text-sm text-slate-800 dark:text-slate-200 line-clamp-1">${template.title}</span>
+                            </div>
+                            <button onclick="event.stopPropagation(); triggerDelete('${template.id}', 'template')" class="absolute right-3 p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
                     `;
                     html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
                 });
@@ -453,6 +468,32 @@
             }
         }
 
+        // ================= DELETE LOGIC (CUSTOM MODAL) =================
+        function triggerDelete(id, type) {
+            state.deleteTarget = { id, type };
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            state.deleteTarget = null;
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+            if (!state.deleteTarget) return;
+            const { id, type } = state.deleteTarget;
+
+            if (type === 'note') state.notes = state.notes.filter(n => n.id !== id);
+            else if (type === 'task') state.tasks = state.tasks.filter(t => t.id !== id);
+            else if (type === 'agenda') state.agenda = state.agenda.filter(a => a.id !== id);
+            else if (type === 'template') state.templates = state.templates.filter(t => t.id !== id);
+
+            saveData();
+            closeModal();
+            renderContent();
+        });
+
+
         // ================= EDITOR LOGIC =================
         const toDatetimeLocal = (isoString) => {
             const d = new Date(isoString);
@@ -460,21 +501,28 @@
             return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
         };
 
-        document.getElementById('btn-fab').addEventListener('click', () => openEditor(null));
+        // FAB Multi-Fungsi
+        document.getElementById('btn-fab').addEventListener('click', () => {
+            if (state.activeTab === 'templates') openEditor(null, null, 'template');
+            else if (state.activeTab === 'notes') openEditor(null, null, 'note');
+            else if (state.activeTab === 'tasks') document.getElementById('input-task-text')?.focus();
+            else if (state.activeTab === 'agenda') document.getElementById('input-agenda-text')?.focus();
+        });
 
-        function openEditor(noteId = null, templateData = null) {
-            state.editingNoteId = noteId;
+        function openEditor(docId = null, templateData = null, type = 'note') {
+            state.editingType = type;
+            state.editingNoteId = docId;
             state.editorUndoBuffer = ''; 
             
             const titleInput = document.getElementById('editor-title');
             const contentInput = document.getElementById('editor-content');
             const dateInput = document.getElementById('editor-date');
             
-            if (noteId) {
-                const note = state.notes.find(n => n.id === noteId);
-                titleInput.value = note.title;
-                contentInput.value = note.content;
-                dateInput.value = toDatetimeLocal(note.date);
+            if (docId) {
+                const doc = type === 'template' ? state.templates.find(t => t.id === docId) : state.notes.find(n => n.id === docId);
+                titleInput.value = doc.title;
+                contentInput.value = doc.content;
+                dateInput.value = doc.date ? toDatetimeLocal(doc.date) : toDatetimeLocal(new Date().toISOString());
             } else if (templateData) {
                 titleInput.value = templateData.title;
                 contentInput.value = templateData.content;
@@ -485,6 +533,7 @@
                 dateInput.value = toDatetimeLocal(new Date().toISOString());
             }
 
+            document.getElementById('editor-type-label').textContent = type === 'template' ? 'Editor Surat' : 'Editor Arsip';
             renderQuickInsertBar();
             document.getElementById('view-editor').classList.remove('hidden');
         }
@@ -510,7 +559,6 @@
             divider.className = "w-px h-6 bg-slate-300 dark:bg-slate-700 mx-1 flex-shrink-0";
             qib.appendChild(divider);
 
-            // Tombol Undo
             const btnUndo = document.createElement('button');
             btnUndo.type = 'button';
             btnUndo.id = 'btn-editor-undo';
@@ -519,7 +567,6 @@
             btnUndo.onclick = restoreEditorContent;
             qib.appendChild(btnUndo);
 
-            // Tombol Hapus Semua
             const btnClear = document.createElement('button');
             btnClear.type = 'button';
             btnClear.className = "flex-shrink-0 flex items-center gap-2 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm";
@@ -533,13 +580,10 @@
         function insertToEditor(text) {
             const textarea = document.getElementById('editor-content');
             textarea.focus(); 
-            
             const start = textarea.selectionStart !== null ? textarea.selectionStart : textarea.value.length;
             const end = textarea.selectionEnd !== null ? textarea.selectionEnd : textarea.value.length;
             const current = textarea.value;
-            
             textarea.value = current.substring(0, start) + text + current.substring(end);
-            
             textarea.selectionStart = textarea.selectionEnd = start + text.length;
             textarea.focus();
         }
@@ -570,29 +614,39 @@
             
             if (!title && !content) return closeEditor();
 
-            const newNote = {
+            const newDoc = {
                 id: state.editingNoteId || Date.now().toString(),
-                title: title || 'Notulensi / Dokumen',
+                title: title || (state.editingType === 'template' ? 'Surat Baru' : 'Notulensi / Dokumen'),
                 content: content,
                 date: dateInput ? new Date(dateInput).toISOString() : new Date().toISOString()
             };
 
-            if (state.editingNoteId) {
-                const idx = state.notes.findIndex(n => n.id === state.editingNoteId);
-                state.notes[idx] = newNote;
+            if (state.editingType === 'template') {
+                if (state.editingNoteId) {
+                    const idx = state.templates.findIndex(t => t.id === state.editingNoteId);
+                    state.templates[idx] = newDoc;
+                } else {
+                    state.templates.unshift(newDoc);
+                }
             } else {
-                state.notes.unshift(newNote);
+                if (state.editingNoteId) {
+                    const idx = state.notes.findIndex(n => n.id === state.editingNoteId);
+                    state.notes[idx] = newDoc;
+                } else {
+                    state.notes.unshift(newDoc);
+                }
             }
 
             saveData();
             closeEditor();
-            if(state.activeTab === 'notes') renderContent();
-            openViewer(newNote.id);
+            renderContent();
+            openViewer(newDoc.id, state.editingType === 'template');
         }
 
-        // ================= VIEWER LOGIC =================
+        // ================= VIEWER LOGIC & SHARE API =================
         function openViewer(docId, isTemplate = false) {
-            state.viewingDoc = isTemplate ? KKN_TEMPLATES.find(t => t.id === docId) : state.notes.find(n => n.id === docId);
+            state.viewingDoc = isTemplate ? state.templates.find(t => t.id === docId) : state.notes.find(n => n.id === docId);
+            state.viewingDoc.isTemplate = isTemplate; // flag temp
             
             document.getElementById('viewer-type-label').textContent = isTemplate ? 'Template Surat' : 'Arsip Dokumen';
             document.getElementById('viewer-title').textContent = state.viewingDoc.title;
@@ -604,8 +658,15 @@
             else contentEl.classList.remove('font-mono', 'text-sm');
 
             const btnScript = document.getElementById('btn-script-filter');
-            if (isTemplate) btnScript.classList.add('hidden');
-            else btnScript.classList.remove('hidden');
+            const btnUseTemplate = document.getElementById('btn-use-template');
+            
+            if (isTemplate) {
+                btnScript.classList.add('hidden');
+                btnUseTemplate.classList.remove('hidden');
+            } else {
+                btnScript.classList.remove('hidden');
+                btnUseTemplate.classList.add('hidden');
+            }
 
             const btnCopy = document.getElementById('btn-copy');
             btnCopy.className = 'flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold transition-all bg-blue-600 text-white';
@@ -618,16 +679,33 @@
 
         function closeViewer() {
             document.getElementById('view-viewer').classList.add('hidden');
-            if(state.activeTab === 'notes') renderContent();
+            renderContent();
+        }
+
+        function useTemplate() {
+            if (!state.viewingDoc) return;
+            closeViewer();
+            openEditor(null, state.viewingDoc, 'note');
         }
 
         function editCurrentNote() {
             if (!state.viewingDoc) return;
             closeViewer();
-            if (state.viewingDoc.id.startsWith('t')) {
-                openEditor(null, state.viewingDoc);
+            openEditor(state.viewingDoc.id, null, state.viewingDoc.isTemplate ? 'template' : 'note');
+        }
+
+        function shareDoc() {
+            if (!state.viewingDoc) return;
+            const cleanText = `${state.viewingDoc.title.replace(/[*_~#\`]/g, '')}\n\n${state.viewingDoc.content.replace(/[*_~#\`]/g, '')}`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: state.viewingDoc.title,
+                    text: cleanText,
+                }).catch(console.error);
             } else {
-                openEditor(state.viewingDoc.id);
+                copyViewerText();
+                alert("Browser Anda tidak mendukung fitur share. Teks telah disalin ke clipboard.");
             }
         }
 
