@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Primary Meta Tags -->
+    <title>KKNKU - Sekretariat Pro</title>
+    <meta name="title" content="KKNKU - Sekretariat Pro">
+    <meta name="description" content="Dashboard Sekretariat Pro untuk Mahasiswa KKN. Kelola arsip, delegasi tugas, timeline kegiatan, dan persuratan otomatis dalam satu aplikasi PWA.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kknku.app/">
+    <meta property="og:title" content="KKNKU - Sekretariat Pro">
+    <meta property="og:description" content="Dashboard Sekretariat Pro untuk Mahasiswa KKN. Kelola arsip, delegasi tugas, timeline kegiatan, dan persuratan otomatis dalam satu aplikasi PWA.">
+    <meta property="og:image" content="https://kknku.app/icon-512x512.png">
+    <meta property="og:site_name" content="KKNKU">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kknku.app/">
+    <meta property="twitter:title" content="KKNKU - Sekretariat Pro">
+    <meta property="twitter:description" content="Dashboard Sekretariat Pro untuk Mahasiswa KKN. Kelola arsip, delegasi tugas, timeline kegiatan, dan persuratan otomatis dalam satu aplikasi PWA.">
+    <meta property="twitter:image" content="https://kknku.app/icon-512x512.png">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #000; }
+        .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 12px); }
+        .pt-safe { padding-top: max(env(safe-area-inset-top), 0px); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(16px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+        
+        .animate-in { animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-zoom { animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
+        .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+    </style>
+</head>
+<body class="w-full h-[100dvh] overflow-hidden flex justify-center text-slate-900 dark:text-white font-sans selection:bg-blue-200 dark:selection:bg-blue-900">
+
+    <div id="app-container" class="w-full max-w-md h-full bg-slate-50 dark:bg-slate-950 flex flex-col relative shadow-2xl transition-colors duration-300 overflow-hidden">
+        
+        <!-- ================= MAIN DASHBOARD ================= -->
+        <div id="view-dashboard" class="flex flex-col h-full w-full absolute inset-0 z-10 bg-slate-50 dark:bg-slate-950">
+            <header class="px-5 pt-safe pb-4 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20 flex justify-between items-end shadow-sm h-[90px]">
+                <div class="flex items-center gap-3">
+                    <svg viewBox="0 0 100 100" class="w-11 h-11" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 25a5 5 0 015-5h50a5 5 0 015 5v50a5 5 0 01-5 5H25a5 5 0 01-5-5V25z" class="text-blue-600 dark:text-blue-500" />
+                        <path d="M35 40h30M35 55h30" class="text-slate-700 dark:text-slate-200" stroke-width="7"/>
+                        <path d="M45 70h10" class="text-blue-600 dark:text-blue-500" stroke-width="8"/>
+                    </svg>
+                    <div>
+                        <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">KKNKU</h1>
+                        <span class="text-[10px] font-bold text-blue-600 tracking-widest uppercase bg-blue-100 dark:bg-blue-900/30 px-1.5 py-0.5 rounded">Pro Dashboard</span>
+                    </div>
+                </div>
+                <button id="btn-theme" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 active:scale-95 transition-all">
+                    <i data-lucide="moon" id="icon-theme" class="w-5 h-5"></i>
+                </button>
+            </header>
+
+            <main id="content-area" class="flex-1 overflow-y-auto px-4 py-6 pb-32 scroll-smooth">
+                <!-- DOM Dihasilkan oleh Virtualization JS -->
+            </main>
+
+            <nav class="absolute bottom-0 w-full z-30">
+                <div class="relative bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-safe shadow-[0_-10px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_-10px_20px_rgba(0,0,0,0.3)]">
+                    <div class="absolute left-1/2 -top-6 -translate-x-1/2">
+                        <button id="btn-fab" class="flex items-center justify-center w-[56px] h-[56px] bg-blue-600 text-white rounded-full shadow-[0_8px_16px_rgba(37,99,235,0.4)] hover:scale-105 active:scale-95 transition-all outline-none border-[6px] border-slate-50 dark:border-slate-950">
+                            <i data-lucide="plus" class="w-7 h-7 stroke-[3]"></i>
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-center h-[64px] px-2 max-w-sm mx-auto">
+                        <div class="flex w-5/12 justify-evenly">
+                            <button onclick="switchTab('notes')" id="tab-notes" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-xl transition-colors text-slate-400">
+                                <i data-lucide="book-open" class="w-5 h-5 mb-0.5 nav-icon stroke-2"></i>
+                                <span class="text-[9px] font-extrabold tracking-wider">ARSIP</span>
+                            </button>
+                            <button onclick="switchTab('tasks')" id="tab-tasks" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-xl transition-colors text-slate-400">
+                                <i data-lucide="check-square" class="w-5 h-5 mb-0.5 nav-icon stroke-2"></i>
+                                <span class="text-[9px] font-extrabold tracking-wider">TUGAS</span>
+                            </button>
+                        </div>
+                        <div class="w-2/12"></div>
+                        <div class="flex w-5/12 justify-evenly">
+                            <button onclick="switchTab('agenda')" id="tab-agenda" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-xl transition-colors text-slate-400">
+                                <i data-lucide="calendar-days" class="w-5 h-5 mb-0.5 nav-icon stroke-2"></i>
+                                <span class="text-[9px] font-extrabold tracking-wider">JADWAL</span>
+                            </button>
+                            <button onclick="switchTab('templates')" id="tab-templates" class="nav-btn flex flex-col items-center justify-center w-[60px] h-[50px] rounded-xl transition-colors text-slate-400">
+                                <i data-lucide="briefcase" class="w-5 h-5 mb-0.5 nav-icon stroke-2"></i>
+                                <span class="text-[9px] font-extrabold tracking-wider">SURAT</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <!-- ================= EDITOR VIEW ================= -->
+        <div id="view-editor" class="hidden flex flex-col h-full w-full absolute inset-0 z-50 bg-slate-50 dark:bg-slate-950 animate-in">
+            <div class="flex justify-between items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-safe">
+                <button onclick="closeEditor()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"><i data-lucide="arrow-left"></i></button>
+                <span class="font-bold text-xs tracking-widest uppercase text-slate-800 dark:text-slate-200">Editor Arsip</span>
+                <button onclick="saveNote()" class="p-2 text-blue-600 bg-blue-50 dark:bg-blue-900/40 rounded-full active:scale-95 transition-all"><i data-lucide="check"></i></button>
+            </div>
+            <div class="flex-1 overflow-y-auto flex flex-col">
+                <div class="bg-white dark:bg-slate-900 px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+                    <input type="text" id="editor-title" placeholder="Subjek Dokumen..." class="w-full text-2xl font-bold bg-transparent border-none outline-none text-slate-900 dark:text-white placeholder-slate-300 focus:ring-0 px-0 mb-3" />
+                    <div class="flex items-center gap-2 text-slate-500 text-sm bg-slate-50 dark:bg-slate-950 p-2 rounded-lg border border-slate-100 dark:border-slate-800 inline-flex">
+                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        <input type="datetime-local" id="editor-date" class="bg-transparent border-none outline-none focus:ring-0 text-slate-700 dark:text-slate-300 cursor-pointer p-0 font-medium text-xs" />
+                    </div>
+                </div>
+                <div id="quick-insert-bar" class="flex gap-2 px-4 py-3 overflow-x-auto scrollbar-hide bg-slate-100 dark:bg-slate-950 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800 shadow-sm items-center">
+                    <!-- Template Cepat Diinjeksi JS -->
+                </div>
+                <textarea id="editor-content" placeholder="Mulai mengetik detail di sini..." class="w-full flex-1 p-5 bg-white dark:bg-slate-900 border-none outline-none text-slate-800 dark:text-slate-200 resize-none leading-relaxed focus:ring-0 text-base pb-32"></textarea>
+            </div>
+        </div>
+
+        <!-- ================= VIEWER VIEW ================= -->
+        <div id="view-viewer" class="hidden flex flex-col h-full w-full absolute inset-0 z-40 bg-white dark:bg-slate-900 animate-in">
+            <div class="flex justify-between items-center px-4 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md pt-safe shadow-sm">
+                <button onclick="closeViewer()" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full"><i data-lucide="arrow-left"></i></button>
+                <span id="viewer-type-label" class="font-semibold text-xs tracking-widest text-slate-400 uppercase">Dokumen</span>
+                <div class="flex gap-2">
+                    <button id="btn-edit-doc" onclick="editCurrentNote()" class="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                    <button onclick="copyViewerText()" id="btn-copy" class="flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold transition-all bg-blue-600 text-white">
+                        <i data-lucide="copy" class="w-4 h-4 icon-copy"></i> <span class="text-copy">Salin</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 scroll-smooth relative">
+                <button id="btn-script-filter" onclick="openScriptView()" class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white p-4 rounded-2xl mb-6 shadow-lg active:scale-[0.98] transition-all font-bold text-sm tracking-wide hidden">
+                    <i data-lucide="wand-2" class="w-5 h-5"></i> FILTER & BUAT NASKAH
+                </button>
+                <h1 id="viewer-title" class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 leading-snug"></h1>
+                <p id="viewer-date" class="text-xs font-semibold text-slate-400 mb-6 border-b border-slate-200 dark:border-slate-800 pb-4"></p>
+                <div id="viewer-content" class="prose prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 whitespace-pre-wrap leading-relaxed text-[15px]"></div>
+            </div>
+        </div>
+
+        <!-- ================= SCRIPT TELEPROMPTER VIEW ================= -->
+        <div id="view-script" class="hidden flex flex-col h-full w-full absolute inset-0 z-50 bg-slate-900 animate-zoom text-white">
+            <div class="flex justify-between items-center px-4 py-3 border-b border-slate-700 bg-slate-800/90 backdrop-blur-md pt-safe">
+                <button onclick="closeScriptView()" class="p-2 text-slate-300 hover:bg-slate-700 rounded-full"><i data-lucide="arrow-left"></i></button>
+                <span class="font-bold text-xs tracking-widest uppercase text-emerald-400 flex items-center gap-2"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i> Mode Pembacaan</span>
+                <div class="w-10"></div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-8 scroll-smooth flex flex-col justify-center pb-20">
+                <div class="text-center mb-8">
+                    <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">Naskah Kesimpulan</h2>
+                    <h1 id="script-title" class="text-2xl font-extrabold text-white leading-snug"></h1>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-2xl relative">
+                    <div class="absolute -top-4 -left-4 bg-emerald-500 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg"><i data-lucide="mic-2" class="w-4 h-4"></i></div>
+                    <p class="text-lg leading-relaxed text-slate-300 italic mb-6">"Berdasarkan hasil diskusi kita pada kegiatan hari ini, izinkan saya membacakan rangkuman kesimpulan dan keputusan yang telah disepakati bersama:"</p>
+                    <div id="script-points" class="space-y-4 mb-6"></div>
+                    <p class="text-lg leading-relaxed text-slate-300 italic border-t border-slate-700 pt-6">"Demikian kesimpulan rapat hari ini. Kami mohon komitmen seluruh pihak terkait untuk melaksanakan keputusan tersebut. Terima kasih."</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // TEKS INSTAN - Diperbarui agar lebih panjang, formal, dan utuh.
+        const QUICK_INSERT_TEXTS = [
+            { 
+                icon: 'list', 
+                label: 'Poin', 
+                text: "\n• " 
+            },
+            { 
+                icon: 'mic-2', 
+                label: 'Sambutan', 
+                text: "Assalamu’alaikum Warahmatullahi Wabarakatuh.\nSelamat pagi/siang/sore, dan salam sejahtera bagi kita semua.\n\nYang terhormat Bapak/Ibu Kepala Desa beserta jajaran perangkat desa,\nYang kami hormati tokoh agama, tokoh masyarakat, dan pimpinan lembaga desa,\nSerta rekan-rekan mahasiswa KKN yang saya banggakan.\n\nPuji syukur senantiasa kita panjatkan kehadirat Allah SWT, Tuhan Yang Maha Esa, karena atas rahmat dan karunia-Nya kita dapat berkumpul pada kesempatan yang baik ini dalam keadaan sehat walafiat. Salawat serta salam semoga senantiasa tercurahkan kepada junjungan kita, Nabi Muhammad SAW.\n\nMelalui kesempatan ini, saya mewakili seluruh jajaran panitia dan tim KKN mengucapkan terima kasih yang tak terhingga atas waktu, tenaga, fasilitas, dan bimbingan yang telah diberikan kepada kami. Kehadiran kami di desa ini pada hakikatnya bukan untuk menggurui, melainkan untuk belajar, berkolaborasi secara nyata, dan mengabdi demi kemajuan desa yang kita cintai ini bersama-sama...\n\n(Silakan lanjutkan sambutan spesifik di sini)" 
+            },
+            { 
+                icon: 'target', 
+                label: 'Tujuan', 
+                text: "Adapun tujuan utama dari penyelenggaraan program dan kegiatan ini meliputi poin-poin berikut:\n\n1. Menggali dan mengoptimalkan potensi lokal desa melalui pendekatan akademis dan praktis agar berdaya guna secara ekonomi maupun sosial.\n2. Membangun sinergi yang kuat dan berkelanjutan antara perguruan tinggi, pemerintah desa, dan masyarakat luas dalam kerangka pembangunan inklusif.\n3. Memberikan solusi nyata dan tepat guna terhadap permasalahan yang ada di lapangan melalui penerapan ilmu pengetahuan dan teknologi (IPTEK).\n4. Meningkatkan kapasitas partisipatif masyarakat desa agar lebih mandiri dan proaktif dalam menghadapi tantangan ke depan.\n\nBesar harapan kami, keseluruhan output dari kegiatan hari ini dapat diimplementasikan dengan baik serta memberikan dampak positif jangka panjang bagi kesejahteraan masyarakat." 
+            },
+            { 
+                icon: 'clock', 
+                label: 'Pembukaan', 
+                text: "--- PEMBUKAAN RAPAT / ACARA ---\n\nHari, Tanggal : [Isi Hari, DD/MM/YYYY]\nWaktu         : [00:00] WIB - Selesai\nTempat        : [Lokasi Rapat]\n\nAgenda Utama  :\n• Pembahasan teknis rancangan pelaksanaan program kerja.\n• Pembagian tugas pokok dan fungsi (Tupoksi) kepanitiaan.\n• Penetapan timeline kegiatan dan tenggat waktu (Deadline).\n\nPimpinan Rapat: [Nama Kordes/PJ]\nNotulis       : [Nama Sekretaris]\nJumlah Hadir  : [Jumlah] Orang (Daftar Absensi Terlampir)\n\n---------------------------------------\n\nRingkasan Diskusi, Arahan, & Aspirasi Forum:\n• " 
+            },
+            { 
+                icon: 'check-circle-2', 
+                label: 'Penutupan', 
+                text: "\n\n---------------------------------------\n--- KESIMPULAN & PENUTUPAN ---\n\nBerdasarkan musyawarah mufakat, berikut adalah Keputusan Final Forum:\n\n1. [Sebutkan keputusan 1 secara rinci dan terukur] (PIC: Nama Penanggung Jawab)\n2. [Sebutkan keputusan 2 beserta tahapan eksekusinya] (Target Selesai: DD/MM/YYYY)\n3. [Sebutkan keputusan 3 jika ada tindak lanjut krusial]\n\nRapat/Acara ini resmi ditutup pada pukul [00:00] WIB. Seluruh kesepakatan tertulis di atas telah dibacakan ulang, disetujui bersama oleh forum secara terbuka, dan bersifat mengikat untuk dilaksanakan dengan penuh rasa tanggung jawab oleh seluruh pihak yang ditunjuk.\n\nSekian dokumen notulensi ini dibuat sebagai arsip sah persidangan.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\nMengetahui dan Mengesahkan,\n\nPimpinan Rapat                                Notulis\n\n\n(_________________________)                   (_________________________)" 
+            }
+        ];
+
+        // 32 TEMPLATE
+        const KKN_TEMPLATES = [
+            { id: 't1', category: 'Pra-KKN', title: '1. Surat Tugas Mahasiswa KKN', content: `[KOP SURAT KAMPUS/PANITIA KKN]\n\nNomor     : 001/ST-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : 1 Berkas\nHal       : Surat Tugas Mahasiswa KKN\n\nYth. Kepala Desa [Nama Desa]\nKecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDengan hormat, sehubungan dengan pelaksanaan Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] Tahun Akademik [Tahun], bersama ini kami menugaskan mahasiswa yang namanya tercantum dalam lampiran surat ini untuk melaksanakan program KKN di Desa [Nama Desa], mulai tanggal [Tanggal Mulai] s.d. [Tanggal Selesai].\n\nDemikian surat tugas ini dibuat agar dapat dipergunakan sebagaimana mestinya. Atas perhatian dan kerja sama Bapak/Ibu, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Kota Kampus], [Tanggal Surat]\nMengetahui,\nKetua LPPM / Panitia KKN\n\n\n(Nama Terang & Gelar)\nNIP. ....................` },
+            { id: 't2', category: 'Pra-KKN', title: '2. Surat Pengantar/Penerjunan KKN', content: `[KOP SURAT KAMPUS]\n\nNomor     : 002/SP-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Surat Pengantar Penerjunan KKN\n\nYth. Kepala Desa [Nama Desa]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nBerdasarkan program Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], kami selaku Dosen Pembimbing Lapangan (DPL) secara resmi menyerahkan [Jumlah] mahasiswa KKN kepada pihak Pemerintah Desa [Nama Desa] untuk melaksanakan pengabdian masyarakat terhitung mulai [Tanggal Mulai] s.d. [Tanggal Selesai].\n\nKami memohon bimbingan, arahan, dan dukungan dari Bapak/Ibu selama mahasiswa berada di lokasi KKN. \n\nWassalamu'alaikum Wr. Wb.\n\n[Kota], [Tanggal]\nDosen Pembimbing Lapangan\n\n\n(Nama DPL & Gelar)\nNIP. ....................` },
+            { id: 't3', category: 'Pra-KKN', title: '3. Surat Permohonan Izin Lokasi KKN', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 003/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Proposal KKN\nHal       : Permohonan Izin Lokasi KKN\n\nYth. Kepala Bakesbangpol / Bupati [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam rangka pelaksanaan Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], kami memohon izin untuk menjadikan Desa [Nama Desa], Kecamatan [Nama Kecamatan] sebagai lokasi pelaksanaan KKN pada [Tanggal Mulai] s.d. [Tanggal Selesai].\n\nBersama ini kami lampirkan proposal kegiatan sebagai bahan pertimbangan Bapak/Ibu. Atas perkenan dan izin yang diberikan, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Kota], [Tanggal]\nKetua Kelompok KKN                          Sekretaris\n\n\n(Nama Ketua)                                (Nama Sekretaris)` },
+            { id: 't4', category: 'Pra-KKN', title: '4. Surat Pernyataan Peserta KKN', content: `SURAT PERNYATAAN PESERTA KKN\n\nYang bertanda tangan di bawah ini:\nNama          : [Nama Mahasiswa]\nNIM           : [NIM]\nFakultas/Prodi: [Fakultas / Program Studi]\nKelompok      : [Nomor/Nama Kelompok]\n\nDengan ini menyatakan BERSEDIA mematuhi seluruh tata tertib pelaksanaan Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] Tahun [Tahun] serta menjaga nama baik almamater, norma agama, dan norma sosial di lokasi KKN. Apabila saya melanggar, saya bersedia menerima sanksi akademis sesuai ketentuan yang berlaku.\n\nDemikian surat pernyataan ini saya buat dengan kesadaran penuh tanpa paksaan dari pihak mana pun.\n\n[Kota], [Tanggal]\nYang Membuat Pernyataan,\n\n[Meterai 10.000]\n(Nama Mahasiswa)\nNIM. [NIM]` },
+            { id: 't5', category: 'Pra-KKN', title: '5. Surat Izin Orang Tua/Wali', content: `SURAT IZIN ORANG TUA/WALI\n\nYang bertanda tangan di bawah ini:\nNama Orang Tua/Wali : [Nama Orang Tua]\nAlamat Lengkap      : [Alamat Lengkap]\nNo. HP/Telepon      : [Nomor Telepon Aktif]\n\nAdalah orang tua/wali dari mahasiswa:\nNama          : [Nama Mahasiswa]\nNIM           : [NIM]\nFakultas/Prodi: [Fakultas/Prodi]\n\nDengan ini memberikan IZIN kepada anak kami tersebut untuk mengikuti seluruh rangkaian kegiatan Kuliah Kerja Nyata (KKN) di Desa [Nama Desa] pada tanggal [Tanggal Mulai] s.d. [Tanggal Selesai]. \n\nDemikian surat izin ini dibuat untuk dipergunakan sebagaimana mestinya.\n\n[Kota Asal], [Tanggal]\nOrang Tua / Wali,\n\n\n(Nama Terang Orang Tua)` },
+            { id: 't6', category: 'Pra-KKN', title: '6. Surat Kesediaan Desa Menerima Mahasiswa', content: `[KOP SURAT PEMERINTAH DESA]\n\nSURAT KETERANGAN KESEDIAAN\nNomor: ........................\n\nYang bertanda tangan di bawah ini:\nNama     : [Nama Kepala Desa]\nJabatan  : Kepala Desa [Nama Desa]\nKecamatan: [Nama Kecamatan]\n\nBerdasarkan surat permohonan dari [Nama Kampus/Kelompok KKN], dengan ini menyatakan BERSEDIA menerima penempatan mahasiswa Kuliah Kerja Nyata (KKN) di wilayah kami terhitung mulai tanggal [Tanggal Mulai] sampai dengan [Tanggal Selesai].\n\nDemikian surat kesediaan ini dibuat untuk menjadi syarat kelengkapan administrasi.\n\n[Nama Desa], [Tanggal]\nKepala Desa [Nama Desa]\n\n\n[Stempel Desa]\n(Nama Kepala Desa)` },
+            { id: 't7', category: 'Pelaksanaan', title: '7. Surat Undangan Rapat', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 007/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Undangan Rapat Koordinasi Kegiatan\n\nYth. [Nama/Jabatan Undangan, misal: Ketua RT/Pemuda Karang Taruna]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSehubungan dengan akan dilaksanakannya program [Nama Program Kerja], kami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam rapat koordinasi yang akan diselenggarakan pada:\n\nHari, Tanggal : [Hari, DD/MM/YYYY]\nWaktu         : [Jam] WIB s.d. Selesai\nTempat        : [Lokasi Rapat]\nAgenda        : Pembahasan teknis pelaksanaan [Nama Program]\n\nMengingat pentingnya acara tersebut, kami sangat mengharapkan kehadiran Bapak/Ibu/Saudara/i tepat pada waktunya. Atas perhatiannya diucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Pelaksana                             Sekretaris\n\n\n(Nama)                                      (Nama)` },
+            { id: 't8', category: 'Pelaksanaan', title: '8. Surat Undangan Sosialisasi', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 008/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Susunan Acara\nHal       : Undangan Sosialisasi Program KKN\n\nYth. Warga Desa [Nama Desa]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam rangka pelaksanaan pengabdian masyarakat, Mahasiswa KKN Universitas [Nama Kampus] bermaksud mengadakan kegiatan Sosialisasi "[Judul Sosialisasi]". Sehubungan dengan hal tersebut, kami mengundang Bapak/Ibu/Saudara/i untuk hadir pada:\n\nHari, Tanggal : [Hari, DD/MM/YYYY]\nWaktu         : [Jam] WIB s.d. Selesai\nTempat        : [Lokasi Kegiatan]\n\nKehadiran dan partisipasi aktif Bapak/Ibu sangat kami harapkan demi suksesnya kegiatan ini. Atas perhatiannya kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
+            { id: 't9', category: 'Pelaksanaan', title: '9. Surat Permohonan Audiensi', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 009/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Permohonan Audiensi\n\nYth. [Nama Pejabat/Instansi, misal: Kepala Dinas Pertanian]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nKami dari mahasiswa Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] yang bertugas di Desa [Nama Desa], bermaksud mengajukan permohonan audiensi dan silaturahmi dengan Bapak/Ibu untuk membahas potensi kolaborasi program kerja di bidang [Bidang Program].\n\nAdapun audiensi kami harapkan dapat dilaksanakan pada waktu dan tempat yang menyesuaikan dengan jadwal Bapak/Ibu. (Alternatif pengajuan: Hari [Hari], [Tanggal]).\n\nDemikian surat permohonan ini kami sampaikan. Besar harapan kami permohonan ini dapat diterima.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
+            { id: 't10', category: 'Pelaksanaan', title: '10. Surat Permohonan Izin Kegiatan', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 010/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Proposal Kegiatan\nHal       : Permohonan Izin Penyelenggaraan Kegiatan\n\nYth. Kepala Desa [Nama Desa] / Polsek [Nama Kecamatan]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSebagai bagian dari program kerja KKN, kami berencana mengadakan kegiatan tingkat desa berupa "[Nama Kegiatan Besar/Festival]" yang akan melibatkan warga dalam jumlah besar. Kegiatan akan dilaksanakan pada:\n\nHari, Tanggal : [Hari, DD/MM/YYYY]\nWaktu         : [Jam] WIB s.d. Selesai\nTempat        : [Lokasi Kegiatan]\n\nUntuk itu, kami memohon izin penyelenggaraan dan bantuan pengamanan/koordinasi demi kelancaran acara tersebut. Detail kegiatan terlampir.\n\nAtas izin dan kerjasamanya, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Panitia                               Mengetahui Kades,\n\n\n(Nama Panitia)                              (Nama Kades)` },
+            { id: 't11', category: 'Pelaksanaan', title: '11. Surat Permohonan Peminjaman Tempat', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 011/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Permohonan Peminjaman Tempat/Fasilitas\n\nYth. Pengelola [Nama Gedung/Fasilitas]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSehubungan dengan program kerja KKN berupa "[Nama Kegiatan]", kami memohon izin untuk meminjam fasilitas berupa [Sebutkan spesifik: Balai Desa / Lapangan / Proyektor / Sound System] pada:\n\nHari, Tanggal : [Hari, DD/MM/YYYY]\nWaktu         : [Jam] WIB s.d. Selesai\n\nFasilitas tersebut akan kami gunakan dan kami pastikan kebersihannya serta dikembalikan dalam kondisi baik seperti semula.\n\nAtas izin yang diberikan, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nPenanggung Jawab Sarpras\n\n\n(Nama PJ Sarpras)` },
+            { id: 't12', category: 'Pelaksanaan', title: '12. Surat Permohonan Narasumber', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 012/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : TOR (Term of Reference)\nHal       : Permohonan Menjadi Narasumber\n\nYth. [Nama Calon Narasumber beserta Gelar]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam rangka meningkatkan kapasitas warga melalui program kerja KKN, kami akan mengadakan kegiatan "[Nama Kegiatan]". Mengingat keahlian dan pengalaman Bapak/Ibu di bidang [Bidang Keahlian], kami bermaksud memohon kesediaan Bapak/Ibu untuk menjadi Narasumber dalam kegiatan tersebut, yang akan dilaksanakan pada:\n\nHari, Tanggal : [Hari, DD/MM/YYYY]\nWaktu         : [Jam] WIB\nTempat        : [Lokasi]\nTema Materi   : [Tema Spesifik]\n\nDemikian permohonan ini kami sampaikan. Kami sangat menantikan konfirmasi kesediaan Bapak/Ibu.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Panitia\n\n\n(Nama Panitia)` },
+            { id: 't13', category: 'Sponsorship', title: '13. Pengajuan Permohonan Dana/Sponsor', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 013/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Proposal Sponsorship\nHal       : Permohonan Sponsor / Bantuan Dana\n\nYth. Pimpinan Instansi / Perusahaan [Nama Perusahaan]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nKami, tim KKN Universitas [Nama Kampus] yang mengabdi di Desa [Nama Desa], sedang mempersiapkan kegiatan puncak bertajuk "[Nama Kegiatan]". \n\nUntuk menyukseskan acara tersebut yang berdampak langsung bagi masyarakat, kami memohon kesediaan instansi/perusahaan yang Bapak/Ibu pimpin untuk dapat berpartisipasi sebagai sponsor/donatur. Adapun rincian anggaran dan bentuk penawaran kerjasama (kontraprestasi logo pada banner, umbul-umbul, dll) terlampir dalam proposal ini.\n\nBesar harapan kami Bapak/Ibu berkenan mendukung kegiatan ini. Atas perhatiannya kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Panitia                               Bendahara\n\n\n(Nama Panitia)                              (Nama Bendahara)` },
+            { id: 't14', category: 'Sponsorship', title: '14. Permohonan Bantuan Barang (In-Kind)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 014/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Daftar Kebutuhan Barang\nHal       : Permohonan Bantuan Barang/Peralatan\n\nYth. [Pimpinan Instansi/Donatur]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSehubungan dengan pelaksanaan program pengadaan fasilitas publik/penghijauan berupa "[Nama Program]", kami dari tim KKN Universitas [Nama Kampus] membutuhkan beberapa material pendukung.\n\nMelalui surat ini, kami memohon bantuan Bapak/Ibu berupa barang/peralatan (seperti bibit tanaman / cat / tempat sampah - sesuaikan dengan lampiran). Bantuan ini akan langsung diserahkan dan dikelola bersama warga Desa [Nama Desa].\n\nAtas partisipasi dan bantuan Bapak/Ibu, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
+            { id: 't15', category: 'Pelaksanaan', title: '15. Surat Permohonan Kerja Sama Institusi', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 015/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Draf MoU/Konsep Kerjasama\nHal       : Permohonan Kerja Sama Institusional\n\nYth. [Kepala Instansi/Lembaga Mitra]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam mengoptimalkan potensi desa dan keberlanjutan program KKN, kami bermaksud mengajukan permohonan kerja sama antara kelompok KKN Universitas [Nama Kampus] Desa [Nama Desa] dengan instansi yang Bapak/Ibu pimpin dalam program "[Nama Program Bersama]".\n\nKerja sama ini diharapkan bersifat mutualisme. Bentuk teknis pelaksanaan terlampir dalam dokumen konsep kerjasama.\n\nDemikian permohonan ini kami ajukan untuk ditindaklanjuti.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua)` },
+            { id: 't16', category: 'Pelaksanaan', title: '16. Surat Tugas Panitia Internal KKN', content: `[KOP SURAT KELOMPOK KKN]\n\nSURAT TUGAS\nNomor: 016/KKN-[Desa]/[Bulan Romawi]/[Tahun]\n\nKetua Kelompok KKN Universitas [Nama Kampus] Desa [Nama Desa] dengan ini menugaskan:\n\nNama : [Nama Anggota]\nNIM  : [NIM]\nDivisi: [Nama Divisi]\n\nUntuk bertindak sebagai Person In Charge (PIC) sekaligus Panitia Utama dalam penyelenggaraan program "[Nama Program]" yang dilaksanakan pada [Tanggal Pelaksanaan].\n\nKepada yang bersangkutan diwajibkan untuk menjalankan tugas dengan penuh tanggung jawab dan melaporkan hasilnya kepada Ketua Kelompok.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
+            { id: 't17', category: 'Pelaksanaan', title: '17. Surat Dispensasi Izin Anggota', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 017/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Permohonan Dispensasi Tidak Mengikuti KKN\n\nYth. Dosen Pembimbing Lapangan (DPL)\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDengan ini kami memberitahukan bahwa anggota kelompok kami:\nNama : [Nama Anggota]\nNIM  : [NIM]\n\nMemohon dispensasi izin tidak dapat berada di posko KKN selama [Jumlah] hari, terhitung tanggal [Tanggal Mulai] s.d. [Tanggal Selesai], dikarenakan [Alasan yang jelas dan mendesak, misal: Sakit/Urusan Keluarga/Ujian Susulan].\n\nDemikian permohonan dispensasi ini kami sampaikan agar menjadi maklum.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN                                 Mahasiswa Ybs,\n\n\n(Nama Ketua)                              (Nama Anggota)` },
+            { id: 't18', category: 'Pelaksanaan', title: '18. Surat Edaran Warga', content: `[KOP SURAT KELOMPOK KKN]\n\nSURAT EDARAN\nNomor: 018/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nTentang: [Judul Edaran, misal: Pelaksanaan Lomba Desa]\n\nYth. Seluruh Warga Desa [Nama Desa]\n\nAssalamu'alaikum Wr. Wb.\n\nDiberitahukan dengan hormat, sehubungan dengan perayaan [Nama Acara], Mahasiswa KKN Universitas [Nama Kampus] akan mengadakan berbagai perlombaan pada:\n\nHari/Tanggal : [Hari, Tanggal]\nTempat       : [Lokasi]\n\nKami mengimbau seluruh warga untuk berpartisipasi dan mendaftarkan diri pada posko KKN atau melalui Kepala Dusun masing-masing selambat-lambatnya tanggal [Tanggal Batas].\n\nDemikian edaran ini disampaikan. Atas perhatiannya kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Panitia\n\n\n(Nama Panitia)` },
+            { id: 't19', category: 'Pelaksanaan', title: '19. Surat Pemberitahuan Kegiatan Rutin', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 019/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Pemberitahuan Pelaksanaan Kegiatan\n\nYth. Kepala Desa [Nama Desa]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nMelalui surat ini, kami memberitahukan bahwa tim KKN Universitas [Nama Kampus] akan melaksanakan agenda rutin berupa "[Nama Kegiatan Rutin, misal: Bimbingan Belajar Gratis]" yang akan berlangsung setiap hari [Hari], pukul [Jam], bertempat di [Lokasi].\n\nSurat ini bersifat sebagai pemberitahuan resmi agar aparat desa mengetahui pergerakan dan aktivitas mahasiswa di lingkungan desa.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua)` },
+            { id: 't20', category: 'Pelaksanaan', title: '20. Surat Keterangan Aktif KKN', content: `[KOP SURAT PEMERINTAH DESA / DPL]\n\nSURAT KETERANGAN AKTIF KKN\nNomor: .....................\n\nYang bertanda tangan di bawah ini menerangkan dengan sesungguhnya bahwa:\n\nNama          : [Nama Mahasiswa]\nNIM           : [NIM]\nFakultas/Prodi: [Fakultas]\n\nAdalah benar-benar tercatat secara aktif sedang melaksanakan Kuliah Kerja Nyata (KKN) di Desa [Nama Desa], Kecamatan [Nama Kecamatan] dari tanggal [Tanggal Mulai] hingga surat ini dikeluarkan.\n\nSurat keterangan ini diberikan untuk keperluan [Sebutkan Keperluan, misal: Persyaratan Beasiswa / Cuti Kerja].\n\n[Desa], [Tanggal]\nKepala Desa / DPL\n\n\n[Stempel & TTD]\n(Nama Lengkap)` },
+            { id: 't21', category: 'Pasca-KKN', title: '21. Surat Ucapan Terima Kasih Warga', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 021/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Ucapan Terima Kasih\n\nYth. Kepala Desa dan Seluruh Warga [Nama Desa]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSeiring dengan berakhirnya masa tugas Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] di Desa [Nama Desa] pada [Tanggal Penarikan], kami segenap mahasiswa KKN mengucapkan TERIMA KASIH yang sebesar-besarnya atas segala bantuan, bimbingan, fasilitas, dan keramahan yang telah diberikan selama kami mengabdi.\n\nKami memohon maaf atas segala tutur kata atau perilaku yang kurang berkenan selama berinteraksi. Semoga silaturahmi tetap terjalin dengan baik.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN                                 Sekretaris\n\n\n(Nama Ketua)                              (Nama Sekretaris)` },
+            { id: 't22', category: 'Pasca-KKN', title: '22. Penyerahan Cinderamata Desa', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 022/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Penyerahan Cinderamata/Kenang-kenangan\n\nYth. Kepala Desa [Nama Desa]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSebagai tanda kehormatan dan kenang-kenangan atas selesainya program KKN di Desa [Nama Desa], bersama surat ini kami serahkan cinderamata berupa [Sebutkan Bentuk Kenang-kenangan, misal: Plakat Vandel / Alat Tulis Kantor].\n\nKami berharap cinderamata ini dapat menjadi simbol tali persaudaraan antara Universitas [Nama Kampus] dengan Desa [Nama Desa].\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua)` },
+            { id: 't23', category: 'Pasca-KKN', title: '23. Berita Acara Serah Terima Program', content: `BERITA ACARA SERAH TERIMA PROGRAM KKN\nNomor: 023/BA-KKN/[Bulan Romawi]/[Tahun]\n\nPada hari ini, [Hari] tanggal [Tanggal] bulan [Bulan] tahun [Tahun], bertempat di Balai Desa [Nama Desa], telah dilakukan serah terima keberlanjutan program kerja KKN, antara:\n\n1. Nama   : [Nama Ketua KKN]\n   Jabatan: Ketua Kelompok KKN (Pihak Pertama)\n2. Nama   : [Nama Kades/Ketua Pemuda]\n   Jabatan: [Jabatan] (Pihak Kedua)\n\nPihak Pertama secara resmi menyerahkan hasil program kerja berupa fisik maupun non-fisik (Daftar aset terlampir) kepada Pihak Kedua. Pihak Kedua menerima penyerahan tersebut dan berkomitmen untuk mengelola serta merawatnya.\n\nDemikian berita acara ini dibuat untuk dipergunakan sebagaimana mestinya.\n\nPihak Pertama (Menyerahkan)                 Pihak Kedua (Menerima)\n\n(Nama Ketua KKN)                            (Nama Kades/Tokoh)` },
+            { id: 't24', category: 'Pasca-KKN', title: '24. Berita Acara Penutupan KKN', content: `BERITA ACARA PENUTUPAN KKN\nNomor: 024/BA-KKN/[Bulan Romawi]/[Tahun]\n\nPada hari ini, [Hari] tanggal [Tanggal] bulan [Bulan] tahun [Tahun], bertempat di [Lokasi Penutupan], telah dilaksanakan acara Penutupan dan Penarikan Mahasiswa KKN Universitas [Nama Kampus] Tahun [Tahun] di Desa [Nama Desa].\n\nAcara penutupan disahkan dan ditandatangani oleh DPL dan Kepala Desa, yang menandakan bahwa mahasiswa KKN secara resmi telah dibebastugaskan dari wilayah Desa [Nama Desa].\n\nDosen Pembimbing Lapangan                 Kepala Desa [Nama Desa]\n\n\n(Nama DPL)                                (Nama Kepala Desa)` },
+            { id: 't25', category: 'Pasca-KKN', title: '25. Surat Keterangan Selesai KKN', content: `[KOP SURAT PEMERINTAH DESA]\n\nSURAT KETERANGAN SELESAI KKN\nNomor: .....................\n\nKepala Desa [Nama Desa], Kecamatan [Nama Kecamatan], dengan ini menerangkan bahwa:\n\nNama Kelompok : Kelompok KKN [Nomor/Nama]\nJumlah Anggota: [Jumlah] Mahasiswa\nAsal Kampus   : Universitas [Nama Kampus]\n\nTelah SELESAI melaksanakan pengabdian Kuliah Kerja Nyata (KKN) di Desa [Nama Desa] dengan predikat [Baik/Sangat Baik] mulai tanggal [Tanggal Mulai] sampai dengan [Tanggal Selesai].\n\nDemikian surat keterangan ini dibuat dengan sebenar-benarnya untuk digunakan sebagai syarat administrasi pasca-KKN di kampus.\n\n[Desa], [Tanggal]\nKepala Desa [Nama Desa]\n\n\n[Stempel & TTD]\n(Nama Kepala Desa)` },
+            { id: 't26', category: 'Pasca-KKN', title: '26. Halaman Pengesahan LPJ', content: `HALAMAN PENGESAHAN\nLAPORAN PERTANGGUNGJAWABAN (LPJ) KKN\n\n1. Judul Laporan     : Laporan Akhir Pelaksanaan KKN Desa [Nama Desa]\n2. Nama Kelompok     : [Nomor Kelompok]\n3. Lokasi KKN        : Desa [Nama Desa], Kec. [Kecamatan], Kab. [Kabupaten]\n4. Waktu Pelaksanaan : [Tanggal Mulai] - [Tanggal Selesai]\n5. Dosen Pembimbing  : [Nama DPL beserta gelar]\n\nLaporan ini telah diperiksa, disetujui, dan disahkan kelayakannya pada tanggal: [Tanggal Pengesahan]\n\n\nMenyetujui,\n\nKepala Desa [Nama Desa]                     Ketua Kelompok KKN\n\n(Nama Kepala Desa)                          (Nama Ketua KKN)\n\n\nMengesahkan,\nDosen Pembimbing Lapangan (DPL)\n\n\n(Nama DPL)\nNIP. ....................` },
+            { id: 't27', category: 'Pelaksanaan', title: '27. Surat Permohonan Juri Perlombaan', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 027/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 Berkas Petunjuk Teknis Lomba\nHal       : Permohonan Menjadi Dewan Juri\n\nYth. Bapak/Ibu [Nama Calon Juri beserta Gelar]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam rangka memeriahkan [Nama Acara, misal: Peringatan HUT RI ke-81], Mahasiswa KKN Universitas [Nama Kampus] menyelenggarakan "[Nama Lomba]". \n\nMengingat kapabilitas dan profesionalisme Bapak/Ibu, kami memohon kesediaannya untuk bertindak sebagai Dewan Juri pada acara tersebut yang akan dilaksanakan pada:\n\nHari, Tanggal : [Hari, Tanggal]\nWaktu         : [Jam] WIB\nTempat        : [Lokasi Lomba]\n\nBesar harapan kami agar Bapak/Ibu berkenan hadir. Atas perhatiannya diucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Panitia\n\n\n(Nama Ketua Panitia)` },
+            { id: 't28', category: 'Sponsorship', title: '28. Penawaran Kerjasama Sponsor Terbuka', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 028/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 Bundel Proposal Sponsorship\nHal       : Penawaran Ruang Promosi / Sponsorship\n\nYth. Manager Marketing / Pimpinan [Nama Perusahaan]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nTim KKN Universitas [Nama Kampus] Desa [Nama Desa] akan menggelar agenda "[Nama Acara Besar]" dengan estimasi partisipan mencapai [Angka] warga yang terdiri dari berbagai elemen masyarakat.\n\nAcara ini merupakan peluang strategis bagi perusahaan Bapak/Ibu untuk mempromosikan produk/jasa langsung kepada target audiens. Oleh karena itu, kami menawarkan beberapa paket sponsorship eksklusif (Tipe Platinum, Gold, Silver) yang mencakup penempatan logo, penyebutan brand, hingga pendirian stand/booth.\n\nDetail hak dan kewajiban tertera pada lampiran proposal. Kami sangat terbuka untuk berdiskusi lebih lanjut.\n\n[Desa], [Tanggal]\nKetua Panitia                               Divisi Sponsorship\n\n\n(Nama Panitia)                              (Nama PIC Sponsor)` },
+            { id: 't29', category: 'Sponsorship', title: '29. Ucapan Terima Kasih Sponsor Spesifik', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 029/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Laporan Dokumentasi Sponsor\nHal       : Ucapan Terima Kasih atas Sponsorship\n\nYth. Pimpinan [Nama Instansi/Perusahaan Sponsor]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nMelalui surat ini, kami segenap Panitia dan Mahasiswa KKN Universitas [Nama Kampus] mengucapkan terima kasih yang sebesar-besarnya atas dukungan pendanaan/fasilitas dari [Nama Perusahaan Bapak/Ibu] dalam menyukseskan acara "[Nama Acara]".\n\nBerkat kontribusi Bapak/Ibu, kegiatan ini berjalan dengan sangat lancar dan memberikan manfaat nyata bagi warga. Bersama ini pula kami lampirkan bukti dokumentasi kontraprestasi (penempatan logo) sebagai bentuk pertanggungjawaban kami.\n\nSemoga [Nama Perusahaan] semakin sukses dan jaya.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
+            { id: 't30', category: 'Pasca-KKN', title: '30. Surat Undangan VIP Penutupan KKN', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 030/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Susunan Acara\nHal       : Undangan VIP Penutupan & Ekspose KKN\n\nYth. Bapak Camat [Nama Kecamatan] / Kepala Desa [Nama Desa]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nSehubungan dengan paripurnanya masa bakti Mahasiswa KKN Universitas [Nama Kampus] di Desa [Nama Desa], kami bermaksud menyelenggarakan acara "Ekspose Hasil KKN & Serah Terima Program" sekaligus perpisahan resmi.\n\nMengingat peran krusial Bapak/Ibu, kami memohon kehadiran Bapak/Ibu sebagai Tamu Kehormatan sekaligus memberikan sambutan penutupan, pada:\n\nHari, Tanggal : [Hari, Tanggal]\nWaktu         : [Jam] WIB\nTempat        : [Lokasi VIP]\n\nKehadiran Bapak/Ibu merupakan kehormatan tersendiri bagi kami. Terima kasih atas perhatiannya.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua KKN\n\n\n(Nama Ketua KKN)` },
+            { id: 't31', category: 'Pelaksanaan', title: '31. Surat Permohonan Layanan Kesehatan (Puskesmas)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 031/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : Proposal Kegiatan\nHal       : Permohonan Tenaga Medis / Cek Kesehatan\n\nYth. Kepala UPT Puskesmas [Nama Kecamatan]\ndi Tempat\n\nAssalamu'alaikum Wr. Wb.\n\nDalam rangka meningkatkan kesadaran kesehatan masyarakat, Mahasiswa KKN Universitas [Nama Kampus] bermaksud mengadakan "Bakti Sosial Cek Kesehatan Gratis" (Cek Tensi, Gula Darah, Asam Urat) untuk Lansia di Desa [Nama Desa].\n\nOleh karena itu, kami memohon kesediaan pihak Puskesmas untuk dapat mendelegasikan [Jumlah] tenaga medis pendamping, yang akan diselenggarakan pada:\n\nHari, Tanggal : [Hari, Tanggal]\nWaktu         : [Jam] WIB s.d Selesai\nTempat        : [Lokasi Balai Desa]\n\nAtas kerjasama dan bantuan Bapak/Ibu, kami ucapkan terima kasih.\n\nWassalamu'alaikum Wr. Wb.\n\n[Desa], [Tanggal]\nKetua Panitia\n\n\n(Nama Ketua Panitia)` },
+            { id: 't32', category: 'Pra-KKN', title: '32. Surat Keterangan Domisili Posko KKN', content: `[KOP SURAT PEMERINTAH DESA]\n\nSURAT KETERANGAN DOMISILI POSKO\nNomor: ........................\n\nYang bertanda tangan di bawah ini, Kepala Desa [Nama Desa], Kecamatan [Nama Kecamatan], menerangkan bahwa:\n\nNama Kelompok : Mahasiswa KKN Universitas [Nama Kampus]\nKetua Kelompok: [Nama Ketua]\nJumlah Anggota: [Jumlah] Orang\n\nAdalah benar saat ini berdomisili / mendirikan Posko Induk KKN di alamat:\nJalan / RT / RW: [Alamat Lengkap Posko]\nRumah Milik    : Bapak/Ibu [Nama Pemilik Rumah]\n\nSurat keterangan ini dibuat untuk keperluan pendataan keamanan dan ketertiban lingkungan selama masa Kuliah Kerja Nyata berlangsung dari [Tanggal Mulai] s.d. [Tanggal Selesai].\n\n[Desa], [Tanggal]\nKepala Desa [Nama Desa]\n\n\n[Stempel & TTD]\n(Nama Kepala Desa)` }
+        ];
+
+        let state = {
+            theme: localStorage.getItem('kknku_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+            activeTab: 'notes',
+            notes: JSON.parse(localStorage.getItem('kknku_notes')) || [],
+            tasks: JSON.parse(localStorage.getItem('kknku_tasks')) || [],
+            agenda: JSON.parse(localStorage.getItem('kknku_agenda')) || [],
+            editingNoteId: null,
+            viewingDoc: null,
+            editorUndoBuffer: ''
+        };
+
+        if (state.notes.length === 0 && state.tasks.length === 0 && state.agenda.length === 0) {
+            state.notes = [{ id: `mock-1`, title: `Rapat Evaluasi Minggu Pertama`, content: `--- PEMBUKAAN RAPAT ---\n\nRingkasan Diskusi:\n• Warga mengeluhkan kurangnya sosialisasi terkait program bank sampah.\n• Divisi acara butuh tambahan dana untuk proyektor.\n\n--- KESIMPULAN ---\nKeputusan Final:\n1. Sosialisasi bank sampah akan diulang door-to-door pada hari Jumat.\n2. Dana proyektor dialihkan dari sisa kas konsumsi.\n3. Rapat selanjutnya diagendakan hari Minggu malam.`, date: new Date().toISOString() }];
+            state.tasks = [{ id: 'ts-1', text: 'Cetak surat undangan', pic: 'Sekretaris', done: false }];
+            state.agenda = [{ id: 'ag-1', text: 'Penyuluhan Pertanian', date: '2026-07-20', location: 'Balai Desa', done: false }];
+            saveData();
+        }
+
+        function saveData() {
+            localStorage.setItem('kknku_notes', JSON.stringify(state.notes));
+            localStorage.setItem('kknku_tasks', JSON.stringify(state.tasks));
+            localStorage.setItem('kknku_agenda', JSON.stringify(state.agenda));
+        }
+
+        function applyTheme() {
+            document.documentElement.classList.toggle('dark', state.theme === 'dark');
+            document.getElementById('icon-theme').setAttribute('data-lucide', state.theme === 'dark' ? 'sun' : 'moon');
+            lucide.createIcons();
+            localStorage.setItem('kknku_theme', state.theme);
+        }
+
+        document.getElementById('btn-theme').addEventListener('click', () => {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            applyTheme();
+        });
+
+        function switchTab(tab) {
+            state.activeTab = tab;
+            ['notes', 'tasks', 'agenda', 'templates'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if(t === tab) {
+                    btn.classList.replace('text-slate-400', 'text-blue-600');
+                    btn.classList.add('bg-blue-50', 'dark:bg-blue-900/20');
+                    btn.querySelector('.nav-icon').classList.replace('stroke-2', 'stroke-[2.5]');
+                } else {
+                    btn.classList.replace('text-blue-600', 'text-slate-400');
+                    btn.classList.remove('bg-blue-50', 'dark:bg-blue-900/20');
+                    btn.querySelector('.nav-icon').classList.replace('stroke-[2.5]', 'stroke-2');
+                }
+            });
+            renderContent();
+        }
+
+        // ================= VIRTUALIZATION ENGINE (Strict DOM Culling) =================
+        let virtualStore = {};
+        let itemObserver = null;
+
+        function renderContent() {
+            if (itemObserver) itemObserver.disconnect();
+            virtualStore = {};
+            
+            itemObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const el = entry.target;
+                    if (entry.isIntersecting) {
+                        if (el.innerHTML === '') {
+                            el.innerHTML = virtualStore[el.id];
+                            lucide.createIcons({ root: el });
+                            void el.offsetWidth;
+                            el.firstElementChild.classList.add('animate-in');
+                        }
+                        el.style.minHeight = 'auto'; 
+                    } else {
+                        if (el.innerHTML !== '') {
+                            el.style.minHeight = el.getBoundingClientRect().height + 'px';
+                            el.innerHTML = ''; 
+                        }
+                    }
+                });
+            }, { rootMargin: '50% 0px' });
+
+            const container = document.getElementById('content-area');
+            let html = '';
+
+            if (state.activeTab === 'notes') {
+                html += `<div class="flex justify-between items-end mb-4 px-1"><h2 class="text-lg font-bold text-slate-800 dark:text-slate-200">Arsip Notulensi</h2><span class="text-xs font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-1 rounded-md">${state.notes.length} Dokumen</span></div><div class="space-y-3">`;
+                if (state.notes.length === 0) html += `<p class="text-center text-slate-400 mt-10 text-sm">Arsip kosong.</p>`;
+                state.notes.forEach(note => {
+                    const vId = 'vitem-' + note.id;
+                    virtualStore[vId] = `
+                        <button onclick="openViewer('${note.id}')" class="w-full text-left p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-400 transition-all active:scale-[0.98] relative overflow-hidden group block">
+                            <div class="absolute top-0 left-0 w-1.5 h-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            <h3 class="font-bold text-slate-900 dark:text-white mb-1.5 line-clamp-1">${note.title}</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 mb-3">${note.content.replace(/[*_~#\`]/g, '')}</p>
+                            <div class="flex justify-between text-[11px] font-bold text-slate-400 uppercase">
+                                <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3"></i> ${new Date(note.date).toLocaleDateString('id-ID')}</span>
+                                <span class="text-blue-500">Buka <i data-lucide="chevron-right" class="w-3 h-3 inline"></i></span>
+                            </div>
+                        </button>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
+                });
+                html += `</div>`;
+            } 
+            else if (state.activeTab === 'tasks') {
+                html += `
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 px-1">Delegasi & Tugas</h2>
+                    <form id="form-task" class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-3 mb-4">
+                        <input id="input-task-text" required placeholder="Tindak lanjut rapat..." class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
+                        <div class="flex gap-2">
+                            <input id="input-task-pic" required placeholder="Nama PIC" class="flex-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
+                            <button type="submit" class="bg-blue-600 text-white font-bold text-sm px-4 py-2 rounded-lg active:scale-95">Tambah</button>
+                        </div>
+                    </form><div class="space-y-3">`;
+                state.tasks.forEach(task => {
+                    const vId = 'vitem-' + task.id;
+                    const statusClass = task.done ? 'bg-slate-50 dark:bg-slate-900/50 opacity-60' : 'bg-white dark:bg-slate-900';
+                    const iconClass = task.done ? 'text-emerald-500' : 'text-slate-300';
+                    const iconName = task.done ? 'check-square' : 'circle';
+                    const textClass = task.done ? 'line-through text-slate-500' : 'text-slate-800 dark:text-slate-200';
+                    virtualStore[vId] = `
+                        <div onclick="toggleTask('${task.id}')" class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer active:scale-[0.98] ${statusClass}">
+                            <button class="mt-0.5 ${iconClass}"><i data-lucide="${iconName}" class="w-5 h-5"></i></button>
+                            <div>
+                                <p class="text-sm font-semibold mb-1 ${textClass}">${task.text}</p>
+                                <span class="text-[10px] font-bold bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded uppercase">PIC: ${task.pic}</span>
+                            </div>
+                        </div>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
+                });
+                html += `</div>`;
+            }
+            else if (state.activeTab === 'agenda') {
+                html += `
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 px-1">Timeline Kegiatan</h2>
+                    <form id="form-agenda" class="bg-emerald-50 dark:bg-emerald-900/10 p-4 rounded-xl border border-emerald-200 dark:border-emerald-900/50 shadow-sm flex flex-col gap-3">
+                        <input id="input-agenda-text" required placeholder="Nama Kegiatan (Misal: Senam Bersama)" class="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
+                        <div class="flex gap-2">
+                            <input id="input-agenda-date" type="date" required class="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
+                            <input id="input-agenda-loc" placeholder="Lokasi" class="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-sm outline-none text-slate-900 dark:text-white" />
+                        </div>
+                        <button type="submit" class="w-full bg-emerald-600 text-white font-bold text-sm px-4 py-2 rounded-lg active:scale-95 mt-1">Set Jadwal</button>
+                    </form>
+                    <div class="border-l-2 border-emerald-200 dark:border-emerald-900/50 ml-3 pl-4 space-y-4 mt-6">`;
+                if (state.agenda.length === 0) html += `<p class="text-slate-400 text-sm italic">Belum ada agenda diset.</p>`;
+                state.agenda.forEach(ag => {
+                    const vId = 'vitem-' + ag.id;
+                    const isDone = ag.done;
+                    const statusClass = isDone ? 'bg-slate-50 dark:bg-slate-900/50 opacity-60' : 'bg-white dark:bg-slate-900';
+                    const dotClass = isDone ? 'bg-slate-400' : 'bg-emerald-500';
+                    const textClass = isDone ? 'line-through text-slate-500' : 'text-slate-800 dark:text-slate-200';
+                    const iconName = isDone ? 'check-square' : 'circle';
+                    const iconClass = isDone ? 'text-emerald-500' : 'text-slate-300';
+                    
+                    virtualStore[vId] = `
+                        <div class="relative ${statusClass} p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm cursor-pointer active:scale-[0.98] transition-all" onclick="toggleAgenda('${ag.id}')">
+                            <div class="absolute -left-[23px] top-5 w-3 h-3 ${dotClass} rounded-full ring-4 ring-slate-50 dark:ring-slate-950 transition-colors"></div>
+                            <div class="flex items-start gap-3">
+                                <button class="mt-0.5 ${iconClass}"><i data-lucide="${iconName}" class="w-5 h-5"></i></button>
+                                <div class="flex-1">
+                                    <h3 class="font-bold ${textClass} transition-colors">${ag.text}</h3>
+                                    <p class="text-xs text-slate-500 font-semibold mt-1 flex items-center gap-1.5"><i data-lucide="calendar-days" class="w-3 h-3"></i> ${new Date(ag.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'short'})} • ${ag.location || 'Lokasi Belum Ditentukan'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
+                });
+                html += `</div>`;
+            }
+            else if (state.activeTab === 'templates') {
+                html += `<h2 class="text-lg font-bold text-slate-800 dark:text-slate-200 px-1 mb-4">Persuratan KKN</h2><div class="space-y-3">`;
+                KKN_TEMPLATES.forEach(template => {
+                    const vId = 'vitem-' + template.id;
+                    virtualStore[vId] = `
+                        <button onclick="openViewer('${template.id}', true)" class="w-full text-left p-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 hover:border-blue-400 active:scale-[0.98] flex items-center gap-3">
+                            <div class="bg-blue-50 dark:bg-blue-900/30 p-2 rounded-lg text-blue-600"><i data-lucide="file-text" class="w-[18px] h-[18px]"></i></div>
+                            <span class="flex-1 font-bold text-sm text-slate-800 dark:text-slate-200 line-clamp-1">${template.title}</span>
+                            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
+                        </button>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full transition-all"></div>`;
+                });
+                html += `</div>`;
+            }
+
+            container.innerHTML = html;
+            document.querySelectorAll('.observe-item').forEach(el => itemObserver.observe(el));
+
+            if(document.getElementById('form-task')) {
+                document.getElementById('form-task').addEventListener('submit', function(e) {
+                    e.preventDefault(); addTask(document.getElementById('input-task-text').value, document.getElementById('input-task-pic').value);
+                });
+            }
+            if(document.getElementById('form-agenda')) {
+                document.getElementById('form-agenda').addEventListener('submit', function(e) {
+                    e.preventDefault(); addAgenda(document.getElementById('input-agenda-text').value, document.getElementById('input-agenda-date').value, document.getElementById('input-agenda-loc').value);
+                });
+            }
+        }
+
+        // ================= EDITOR LOGIC =================
+        const toDatetimeLocal = (isoString) => {
+            const d = new Date(isoString);
+            const pad = (n) => n.toString().padStart(2, '0');
+            return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        };
+
+        document.getElementById('btn-fab').addEventListener('click', () => openEditor(null));
+
+        function openEditor(noteId = null, templateData = null) {
+            state.editingNoteId = noteId;
+            state.editorUndoBuffer = ''; 
+            
+            const titleInput = document.getElementById('editor-title');
+            const contentInput = document.getElementById('editor-content');
+            const dateInput = document.getElementById('editor-date');
+            
+            if (noteId) {
+                const note = state.notes.find(n => n.id === noteId);
+                titleInput.value = note.title;
+                contentInput.value = note.content;
+                dateInput.value = toDatetimeLocal(note.date);
+            } else if (templateData) {
+                titleInput.value = templateData.title;
+                contentInput.value = templateData.content;
+                dateInput.value = toDatetimeLocal(new Date().toISOString());
+            } else {
+                titleInput.value = '';
+                contentInput.value = '';
+                dateInput.value = toDatetimeLocal(new Date().toISOString());
+            }
+
+            renderQuickInsertBar();
+            document.getElementById('view-editor').classList.remove('hidden');
+        }
+
+        function renderQuickInsertBar() {
+            const qib = document.getElementById('quick-insert-bar');
+            qib.innerHTML = '';
+            
+            QUICK_INSERT_TEXTS.forEach((item) => {
+                const btn = document.createElement('button');
+                btn.type = 'button'; 
+                btn.className = item.label === 'Poin' 
+                    ? "flex-shrink-0 flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm"
+                    : "flex-shrink-0 flex items-center gap-2 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-400 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm";
+                btn.innerHTML = `<i data-lucide="${item.icon}" class="w-4 h-4"></i> ${item.label}`;
+                
+                btn.onclick = () => insertToEditor(item.text);
+                
+                qib.appendChild(btn);
+            });
+
+            const divider = document.createElement('div');
+            divider.className = "w-px h-6 bg-slate-300 dark:bg-slate-700 mx-1 flex-shrink-0";
+            qib.appendChild(divider);
+
+            // Tombol Undo
+            const btnUndo = document.createElement('button');
+            btnUndo.type = 'button';
+            btnUndo.id = 'btn-editor-undo';
+            btnUndo.className = "hidden flex-shrink-0 flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-400 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm";
+            btnUndo.innerHTML = `<i data-lucide="undo-2" class="w-4 h-4"></i> Batal Hapus`;
+            btnUndo.onclick = restoreEditorContent;
+            qib.appendChild(btnUndo);
+
+            // Tombol Hapus Semua
+            const btnClear = document.createElement('button');
+            btnClear.type = 'button';
+            btnClear.className = "flex-shrink-0 flex items-center gap-2 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-4 py-2 rounded-lg text-sm font-bold active:scale-95 shadow-sm";
+            btnClear.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i> Hapus Semua`;
+            btnClear.onclick = clearEditorContent;
+            qib.appendChild(btnClear);
+
+            lucide.createIcons({ root: qib });
+        }
+
+        function insertToEditor(text) {
+            const textarea = document.getElementById('editor-content');
+            textarea.focus(); 
+            
+            const start = textarea.selectionStart !== null ? textarea.selectionStart : textarea.value.length;
+            const end = textarea.selectionEnd !== null ? textarea.selectionEnd : textarea.value.length;
+            const current = textarea.value;
+            
+            textarea.value = current.substring(0, start) + text + current.substring(end);
+            
+            textarea.selectionStart = textarea.selectionEnd = start + text.length;
+            textarea.focus();
+        }
+
+        function clearEditorContent() {
+            const textarea = document.getElementById('editor-content');
+            if(!textarea.value.trim()) return;
+            state.editorUndoBuffer = textarea.value;
+            textarea.value = '';
+            document.getElementById('btn-editor-undo').classList.remove('hidden');
+        }
+
+        function restoreEditorContent() {
+            if(!state.editorUndoBuffer) return;
+            const textarea = document.getElementById('editor-content');
+            textarea.value = state.editorUndoBuffer;
+            state.editorUndoBuffer = '';
+            document.getElementById('btn-editor-undo').classList.add('hidden');
+            textarea.focus();
+        }
+
+        function closeEditor() { document.getElementById('view-editor').classList.add('hidden'); }
+
+        function saveNote() {
+            const title = document.getElementById('editor-title').value.trim();
+            const content = document.getElementById('editor-content').value.trim();
+            const dateInput = document.getElementById('editor-date').value;
+            
+            if (!title && !content) return closeEditor();
+
+            const newNote = {
+                id: state.editingNoteId || Date.now().toString(),
+                title: title || 'Notulensi / Dokumen',
+                content: content,
+                date: dateInput ? new Date(dateInput).toISOString() : new Date().toISOString()
+            };
+
+            if (state.editingNoteId) {
+                const idx = state.notes.findIndex(n => n.id === state.editingNoteId);
+                state.notes[idx] = newNote;
+            } else {
+                state.notes.unshift(newNote);
+            }
+
+            saveData();
+            closeEditor();
+            if(state.activeTab === 'notes') renderContent();
+            openViewer(newNote.id);
+        }
+
+        // ================= VIEWER LOGIC =================
+        function openViewer(docId, isTemplate = false) {
+            state.viewingDoc = isTemplate ? KKN_TEMPLATES.find(t => t.id === docId) : state.notes.find(n => n.id === docId);
+            
+            document.getElementById('viewer-type-label').textContent = isTemplate ? 'Template Surat' : 'Arsip Dokumen';
+            document.getElementById('viewer-title').textContent = state.viewingDoc.title;
+            document.getElementById('viewer-date').textContent = isTemplate ? '' : new Date(state.viewingDoc.date).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+            
+            const contentEl = document.getElementById('viewer-content');
+            contentEl.textContent = state.viewingDoc.content; 
+            if (isTemplate) contentEl.classList.add('font-mono', 'text-sm');
+            else contentEl.classList.remove('font-mono', 'text-sm');
+
+            const btnScript = document.getElementById('btn-script-filter');
+            if (isTemplate) btnScript.classList.add('hidden');
+            else btnScript.classList.remove('hidden');
+
+            const btnCopy = document.getElementById('btn-copy');
+            btnCopy.className = 'flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold transition-all bg-blue-600 text-white';
+            btnCopy.querySelector('.text-copy').textContent = 'Salin';
+            btnCopy.querySelector('.icon-copy').setAttribute('data-lucide', 'copy');
+            
+            lucide.createIcons();
+            document.getElementById('view-viewer').classList.remove('hidden');
+        }
+
+        function closeViewer() {
+            document.getElementById('view-viewer').classList.add('hidden');
+            if(state.activeTab === 'notes') renderContent();
+        }
+
+        function editCurrentNote() {
+            if (!state.viewingDoc) return;
+            closeViewer();
+            if (state.viewingDoc.id.startsWith('t')) {
+                openEditor(null, state.viewingDoc);
+            } else {
+                openEditor(state.viewingDoc.id);
+            }
+        }
+
+        function copyViewerText() {
+            if (!state.viewingDoc) return;
+            const cleanText = `${state.viewingDoc.title.replace(/[*_~#\`]/g, '')}\n\n${state.viewingDoc.content.replace(/[*_~#\`]/g, '')}`;
+
+            const ta = document.createElement("textarea");
+            ta.value = cleanText;
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                const btnCopy = document.getElementById('btn-copy');
+                btnCopy.className = 'flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold transition-all bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400';
+                btnCopy.querySelector('.text-copy').textContent = 'Tersalin';
+                btnCopy.querySelector('.icon-copy').setAttribute('data-lucide', 'check');
+                lucide.createIcons();
+                setTimeout(() => {
+                    btnCopy.className = 'flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-bold transition-all bg-blue-600 text-white';
+                    btnCopy.querySelector('.text-copy').textContent = 'Salin';
+                    btnCopy.querySelector('.icon-copy').setAttribute('data-lucide', 'copy');
+                    lucide.createIcons();
+                }, 2000);
+            } catch (err) {}
+            document.body.removeChild(ta);
+        }
+
+        // ================= SCRIPT FILTER LOGIC =================
+        function openScriptView() {
+            if (!state.viewingDoc) return;
+            document.getElementById('script-title').textContent = state.viewingDoc.title;
+            
+            const lines = state.viewingDoc.content.split('\n');
+            const points = lines.filter(line => /^[•\-\*]/.test(line.trim()) || /^\d+\./.test(line.trim()));
+            const finalPoints = points.length > 0 ? points : ["(Tidak ada format poin yang terdeteksi. Silakan bacakan ringkasan secara umum)"];
+            
+            const container = document.getElementById('script-points');
+            container.innerHTML = '';
+            
+            finalPoints.forEach(pt => {
+                const text = pt.replace(/^[•\-\*\d\.]+\s*/, '');
+                container.innerHTML += `
+                    <div class="flex gap-3 items-start">
+                        <span class="text-emerald-400 mt-1"><i data-lucide="check-circle-2" class="w-5 h-5"></i></span>
+                        <span class="text-xl font-bold text-white leading-relaxed">${text}</span>
+                    </div>`;
+            });
+            
+            lucide.createIcons();
+            document.getElementById('view-script').classList.remove('hidden');
+        }
+
+        function closeScriptView() { document.getElementById('view-script').classList.add('hidden'); }
+
+        // ================= TASKS & AGENDA LOGIC =================
+        function addTask(text, pic) {
+            state.tasks.unshift({ id: Date.now().toString(), text, pic, done: false });
+            saveData(); renderContent();
+        }
+
+        function toggleTask(id) {
+            const idx = state.tasks.findIndex(t => t.id === id);
+            if (idx > -1) { state.tasks[idx].done = !state.tasks[idx].done; saveData(); renderContent(); }
+        }
+
+        function addAgenda(text, date, location) {
+            state.agenda.push({ id: Date.now().toString(), text, date, location, done: false });
+            state.agenda.sort((a, b) => new Date(a.date) - new Date(b.date));
+            saveData(); renderContent();
+        }
+
+        function toggleAgenda(id) {
+            const idx = state.agenda.findIndex(a => a.id === id);
+            if (idx > -1) { state.agenda[idx].done = !state.agenda[idx].done; saveData(); renderContent(); }
+        }
+
+        // Init App
+        applyTheme();
+        switchTab('notes');
+
+    </script>
+</body>
+</html>
