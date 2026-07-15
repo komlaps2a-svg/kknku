@@ -1,5 +1,5 @@
-// sw.js
-const CACHE_NAME = 'kknku-pro-v5';
+// sw.js (VERSI 6: FULL DYNAMIC CACHING)
+const CACHE_NAME = 'kknku-pro-v6';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -10,59 +10,39 @@ const ASSETS_TO_CACHE = [
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return Promise.allSettled(
-                ASSETS_TO_CACHE.map(url => cache.add(url).catch(err => console.warn('Pengecualian cache untuk:', url)))
-            );
-        })
+        caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
     );
+    self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((cache) => {
-                    if (cache !== CACHE_NAME) return caches.delete(cache);
-                })
-            );
-        }).then(() => self.clients.claim())
+        caches.keys().then((keys) => Promise.all(
+            keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+        ))
     );
 });
 
-self.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
-        self.skipWaiting();
-    }
-});
-
 self.addEventListener('fetch', (event) => {
-    if (event.request.mode === 'navigate') {
-        event.respondWith(
-            fetch(event.request).then((networkResponse) => {
-                return caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(event.request, networkResponse.clone());
-                    return networkResponse;
-                });
-            }).catch(() => caches.match(event.request))
-        );
-        return;
-    }
-
+    // 1. Strategi Cache-First untuk semua request
     event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request).then((networkResponse) => {
-                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                    return networkResponse;
-                }
-                const responseToCache = networkResponse.clone();
-                caches.open(CACHE_NAME).then((cache) => {
-                    if (event.request.url.startsWith('http')) {
+        caches.match(event.request).then((cachedResponse) => {
+            if (cachedResponse) return cachedResponse;
+
+            // 2. Jika tidak ada di cache, ambil dari network
+            return fetch(event.request).then((networkResponse) => {
+                // 3. Simpan hasil network ke cache (Runtime Caching)
+                if (networkResponse && networkResponse.status === 200) {
+                    const responseToCache = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
                         cache.put(event.request, responseToCache);
-                    }
-                });
+                    });
+                }
                 return networkResponse;
-            }).catch(() => {});
+            }).catch(() => {
+                // Opsional: Fallback untuk request yang gagal (misal jika bukan file navigasi)
+                return new Response('Offline', { status: 404 });
+            });
         })
     );
 });
