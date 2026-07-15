@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kknku-pro-v3';
+const CACHE_NAME = 'kknku-pro-v4'; // Penambahan iterasi cache untuk mendobrak statika peramban
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -8,12 +8,11 @@ const ASSETS_TO_CACHE = [
 ];
 
 self.addEventListener('install', (event) => {
-    self.skipWaiting();
+    // Instalasi seketika, namun aktivasi dikendalikan oleh instruksi klien
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            // Isolasi jaringan statis: Kegagalan 1 aset tidak merusak status PWA keseluruhan
             return Promise.allSettled(
-                ASSETS_TO_CACHE.map(url => cache.add(url).catch(err => console.warn('Cache diabaikan untuk:', url)))
+                ASSETS_TO_CACHE.map(url => cache.add(url).catch(err => console.warn('Pengecualian cache untuk:', url)))
             );
         })
     );
@@ -31,7 +30,28 @@ self.addEventListener('activate', (event) => {
     );
 });
 
+// Listener Khusus Pembaruan Sinkron: Memaksa transisi dari 'waiting' ke 'active'
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+});
+
 self.addEventListener('fetch', (event) => {
+    // Mode Khusus HTML: Network-First untuk menjamin validasi pembaruan kode 
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request).then((networkResponse) => {
+                return caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(event.request, networkResponse.clone());
+                    return networkResponse;
+                });
+            }).catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    // Aset Statis (CSS, JS, Gambar): Cache-First dengan fallback Network
     event.respondWith(
         caches.match(event.request).then((response) => {
             return response || fetch(event.request).then((networkResponse) => {
@@ -45,7 +65,7 @@ self.addEventListener('fetch', (event) => {
                     }
                 });
                 return networkResponse;
-            }).catch(() => {}); // Logika jatuh kembali statis saat luring total
+            }).catch(() => {});
         })
     );
 });
